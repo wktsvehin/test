@@ -137,7 +137,7 @@
     
     <div class="section-title icon-text">✅ 今日已確認名單 <span class="eng-text">Today's Confirmed List</span></div>
     <div class="table-responsive">
-      <table>
+      </table>
         <thead>
           <tr>
             <th>#</th>
@@ -296,7 +296,7 @@ function logout() {
 
 function loadData() {
   const confirmTable = document.getElementById('confirmedTable');
-  if (confirmTable) confirmTable.innerHTML = '<td><td colspan="10">⏳ 載入中...<\/td><\/tr>';
+  if (confirmTable) confirmTable.innerHTML = '</table><td colspan="10">⏳ 載入中...<\/td><\/tr>';
   
   fetch(API)
     .then(r => r.json())
@@ -486,7 +486,7 @@ function resetForm() {
   initDatePicker();
 }
 
-// ==================== PDF 匯出 (大字體版本) ====================
+// ==================== PDF 匯出 (車輛種類欄位加闊) ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
@@ -522,7 +522,7 @@ async function exportPDF() {
   
   try {
     const { jsPDF } = window.jspdf;
-    const ROWS_PER_PAGE = 12;  // 大字體，每頁顯示 12 個申請
+    const ROWS_PER_PAGE = 10;
     const totalPages = Math.ceil(list.length / ROWS_PER_PAGE);
     const pdf = new jsPDF('l', 'mm', 'a4');
     
@@ -574,12 +574,12 @@ async function exportPDF() {
             <col style="width:5%">
             <col style="width:10%">
             <col style="width:12%">
-            <col style="width:10%">
-            <col style="width:15%">
             <col style="width:9%">
+            <col style="width:18%">
             <col style="width:9%">
             <col style="width:8%">
-            <col style="width:22%">
+            <col style="width:8%">
+            <col style="width:21%">
           </colgroup>
           <thead>
             <tr style="background:#f0f0f0;">
@@ -595,7 +595,7 @@ async function exportPDF() {
             </tr>
           </thead>
           <tbody>${tableRows}</tbody>
-        </table>
+        <table>
         <div style="margin-top:15px;font-size:12px;text-align:center;">系統產生之記錄，請核對無誤後簽署</div>
         <div style="font-size:10px;text-align:center;">System generated record, please verify before signing</div>
       `;
