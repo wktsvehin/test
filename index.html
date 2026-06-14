@@ -196,7 +196,6 @@
       margin-bottom: 20px;
     }
     
-    /* 時間選填提示樣式 */
     .optional-badge {
       font-size: 0.7rem;
       color: #38a169;
@@ -492,7 +491,7 @@ async function loadFreshData() {
   }
 }
 
-// 檢查重複日期（使用最新資料）
+// 檢查重複日期（返回衝突的日期列表）
 async function checkDuplicateDates(vehicleNo, dates) {
   await loadFreshData();
   const existingDates = cachedData
@@ -639,6 +638,7 @@ function generateRefNo() {
 
 // ==================== 主要流程 ====================
 
+// 步驟1: 填寫表單 -> 顯示預覽（不檢查重複）
 async function showPreview(e) {
   e.preventDefault();
   
@@ -661,9 +661,8 @@ async function showPreview(e) {
   } else if (!h && m) {
     tm = `00:${m}`;
   }
-  // 如果 tm 是空字串，表示沒有輸入時間
   
-  // 驗證基本欄位（時間除外，因為是選填）
+  // 驗證基本欄位
   if (!c || !v || !cp || !t || !p || !vt) { 
     alert('請填寫所有欄位 / Please fill in all fields'); 
     return false; 
@@ -673,40 +672,7 @@ async function showPreview(e) {
     return false; 
   }
   
-  showLoading(true, '檢查重複登記...');
-  
-  // 檢查重複日期
-  const conflictDates = await checkDuplicateDates(v, selectedDates);
-  
-  showLoading(false);
-  
-  // 如果有衝突日期
-  if (conflictDates.length > 0) {
-    alert(`⚠️ 以下日期已有 ${v} 的登記，已自動移除：\n${conflictDates.join(', ')}\n\n請重新選擇其他日期。`);
-    
-    const newSelectedDates = selectedDates.filter(d => !conflictDates.includes(d));
-    
-    if (newSelectedDates.length === 0) {
-      alert('所有選擇的日期都已有登記，無法提交。');
-      return false;
-    }
-    
-    selectedDates = newSelectedDates;
-    updateSelectedHint();
-    
-    document.querySelectorAll('.date-checkbox-item input').forEach(cb => {
-      cb.checked = selectedDates.includes(cb.value);
-      if (cb.checked) {
-        cb.parentElement.classList.add('selected');
-      } else {
-        cb.parentElement.classList.remove('selected');
-      }
-    });
-    
-    alert(`已移除衝突日期。現在將預約：${selectedDates.join(', ')}`);
-  }
-  
-  // 儲存待提交資料（時間可能為空字串）
+  // 儲存待提交資料（暫不檢查重複）
   pendingSubmissionData = { 
     company: c, 
     vehicleNo: v, 
@@ -714,7 +680,7 @@ async function showPreview(e) {
     telNo: t, 
     purpose: p, 
     vehicleType: vt, 
-    visitTime: tm,  // 可能是空字串
+    visitTime: tm,
     dates: [...selectedDates]
   };
   
@@ -734,12 +700,14 @@ async function showPreview(e) {
   return false;
 }
 
+// 步驟2: 返回修改
 function backToForm() {
   document.getElementById('previewSection').classList.add('hidden');
   document.getElementById('formSection').classList.remove('hidden');
   pendingSubmissionData = null;
 }
 
+// 步驟3: 確認提交（在這裡檢查重複，有重複則停留在預覽頁面）
 async function submitFinal() {
   if (isSubmitting) {
     alert('正在提交中，請稍後...');
@@ -752,6 +720,22 @@ async function submitFinal() {
   }
   
   isSubmitting = true;
+  showLoading(true, '檢查重複登記...');
+  
+  // 檢查重複日期（此時才檢查 Google Sheets）
+  const conflictDates = await checkDuplicateDates(pendingSubmissionData.vehicleNo, pendingSubmissionData.dates);
+  
+  showLoading(false);
+  
+  // 如果有衝突日期
+  if (conflictDates.length > 0) {
+    // 彈出警告，停留在預覽頁面，不產生 ref no，不寫入 Google Sheets
+    alert(`⚠️ 以下日期已有 ${pendingSubmissionData.vehicleNo} 的登記，無法重複預約：\n${conflictDates.join(', ')}\n\n請按「返回修改」重新選擇日期。`);
+    isSubmitting = false;
+    return;  // 停留在預覽頁面
+  }
+  
+  // 無重複，繼續提交
   showLoading(true, '正在提交資料到伺服器...');
   
   const results = [];
@@ -803,7 +787,6 @@ async function submitFinal() {
   // 重置表單
   document.getElementById('regForm').reset();
   renderDateCheckboxes();
-  // 重置時間選擇器
   document.getElementById('hour').value = '';
   document.getElementById('minute').value = '';
   
