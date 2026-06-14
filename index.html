@@ -23,21 +23,18 @@
     .btn-tab.staff .chi-text, .btn-tab.staff .eng-text { color: #ffffff; }
     
     /* ========== 訪客頁面：英文與中文相同大小 ========== */
-    /* 警告區塊內的英文與中文相同大小 */
     .alert-cutoff .eng-text, 
     .alert-reminder .eng-text { 
       font-size: inherit !important; 
       line-height: 1.3;
     }
     
-    /* 表單標籤旁的英文 (form-sub) 與中文相同大小 */
     .form-group .form-sub,
     .form-group .eng-text { 
       font-size: inherit !important; 
       display: block;
     }
     
-    /* 按鈕內的英文與中文相同大小 */
     .btn-gold .eng-text,
     .btn-success .eng-text,
     .btn-outline .eng-text,
@@ -45,30 +42,47 @@
       font-size: inherit !important; 
     }
     
-    /* 預覽區塊內的英文與中文相同大小 */
     .preview-label, .preview-value,
     .preview-box .eng-text { 
       font-size: inherit !important; 
     }
     
-    /* 成功區塊內的英文 */
     .ref-box p, .ref-box span,
     .success-eng-text { 
       font-size: inherit !important; 
     }
     
-    /* 注意事項標題內的英文 */
     .alert-reminder div.eng-text,
     .alert-cutoff div.eng-text { 
       font-size: inherit !important; 
     }
     
-    /* 職員頁面英文維持原樣，不受影響 */
+    /* 職員頁面英文維持原樣 */
     #staffPanel .eng-text {
       font-size: 0.7rem !important;
     }
     #staffPanel .btn-success .eng-text,
     #staffPanel .btn-outline .eng-text {
+      font-size: 0.9rem !important;
+    }
+    
+    /* ========== 預覽頁面按鈕：字體大小與 Staff Only 按鈕相同 ========== */
+    /* Staff Only 按鈕的 eng-text 字體大小為 0.9rem */
+    .preview-section-buttons .btn-secondary .chi-text,
+    .preview-section-buttons .btn-secondary .eng-text,
+    .preview-section-buttons .btn-success .chi-text,
+    .preview-section-buttons .btn-success .eng-text {
+      font-size: 0.9rem !important;
+    }
+    
+    /* Confirm 按鈕的英文改為白色 */
+    .preview-section-buttons .btn-success .eng-text {
+      color: #ffffff !important;
+    }
+    
+    /* New Application 按鈕字體大小與 Staff Only 相同 */
+    .new-app-btn .chi-text,
+    .new-app-btn .eng-text {
       font-size: 0.9rem !important;
     }
     /* ========== 結束 ========== */
@@ -116,7 +130,7 @@
     .plate-input-search { padding-left: 12px !important; }
     .icon-text { display: inline-flex; align-items: center; gap: 6px; }
     
-    /* 首頁英文副標題放大50%：從 0.75rem → 1.125rem */
+    /* 首頁英文副標題放大50% */
     .subtitle-eng {
       font-size: 1.125rem !important;
       color: #718096;
@@ -183,11 +197,14 @@
       <div class="preview-row"><span class="preview-label">📅 日期/Date :</span><span id="pDate" class="preview-value"></span></div>
       <div class="preview-row"><span class="preview-label">⏱️ 時間/Time :</span><span id="pTime" class="preview-value"></span></div>
     </div>
-    <div class="flex"><button class="btn-secondary w-100" onclick="backToForm()"><span class="chi-text">← 返回修改</span><span class="eng-text">Back</span></button><button class="btn-success w-100" onclick="submitFinal()"><span class="chi-text">✓ 確認提交</span><span class="eng-text">Confirm</span></button></div>
+    <div class="flex preview-section-buttons">
+      <button class="btn-secondary w-100" onclick="backToForm()"><span class="chi-text">← 返回修改</span><span class="eng-text">Back</span></button>
+      <button class="btn-success w-100" onclick="submitFinal()"><span class="chi-text">✓ 確認提交</span><span class="eng-text">Confirm</span></button>
+    </div>
   </div>
   <div id="successSection" class="card hidden">
     <div class="ref-box"><h3 style="color:#38a169;">🎉 登記申請已送出</h3><div style="background:#fff;border-radius:12px;padding:16px;margin:16px 0"><span style="color:#718096;">📄 參考編號</span><h2 id="refNumber" style="color:#2c7a7b;">----</h2></div><p>📸 請截圖保存此畫面 <span class="eng-text" style="display:inline;">Please screenshot this page</span></p></div>
-    <button class="btn-outline w-100 mt-2" onclick="resetForm()"><span class="chi-text">➕ 填寫新申請</span><span class="eng-text">New Application</span></button>
+    <button class="btn-outline w-100 mt-2 new-app-btn" onclick="resetForm()"><span class="chi-text">➕ 填寫新申請</span><span class="eng-text">New Application</span></button>
   </div>
 </div>
 
@@ -326,7 +343,6 @@ function switchTab(t) {
   if (t === 'visitor') {
     v.style.display = 'block'; s.style.display = 'none';
     bv.classList.add('active'); bs.classList.remove('active');
-    // ✅ 返回到訪客登記頁面時自動登出
     if (isLoggedIn) {
       logout();
     }
@@ -559,7 +575,7 @@ function resetForm() {
   initDatePicker();
 }
 
-// ==================== PDF 匯出 (無紀錄時只顯示簡潔提示) ====================
+// ==================== PDF 匯出 ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
@@ -580,7 +596,6 @@ async function exportPDF() {
   let queryDate = subtractOneDay(selectedDate);
   let list = cachedData.filter(item => item.visit_date === queryDate);
   
-  // 無紀錄時只顯示簡潔提示
   if (list.length === 0) {
     alert(`沒有 ${selectedDate} 的車輛紀錄`);
     return;
