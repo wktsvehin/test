@@ -168,7 +168,7 @@ let pendingSubmissionData = null;
 
 // ==================== 輔助函數 ====================
 
-// ✅ 修復：今日日期減 1 日（因為系統比實際多咗 1 日）
+// 今日日期減 1 日
 function getTodayString() {
   let now = new Date();
   let correctedDate = new Date(now);
@@ -176,7 +176,6 @@ function getTodayString() {
   let year = correctedDate.getFullYear();
   let month = (correctedDate.getMonth() + 1).toString().padStart(2, '0');
   let day = correctedDate.getDate().toString().padStart(2, '0');
-  console.log(`📅 今日日期 (修正後): ${year}-${month}-${day}`);
   return `${year}-${month}-${day}`;
 }
 
@@ -297,7 +296,7 @@ function logout() {
 
 function loadData() {
   const confirmTable = document.getElementById('confirmedTable');
-  if (confirmTable) confirmTable.innerHTML = '<tr><td colspan="10">⏳ 載入中...<\/td><\/tr>';
+  if (confirmTable) confirmTable.innerHTML = '<td><td colspan="10">⏳ 載入中...<\/td><\/tr>';
   
   fetch(API)
     .then(r => r.json())
@@ -487,13 +486,11 @@ function resetForm() {
   initDatePicker();
 }
 
-// ==================== PDF 匯出 ====================
+// ==================== PDF 匯出 (大字體版本) ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
   
-  // ✅ 關鍵修復：因為 cachedData 入面嘅日期係正確嘅（例如 2026-06-14）
-  // 但 Google Sheets 儲存 UTC 時間，所以要用 subtractOneDay 嚟查詢
   function subtractOneDay(dateStr) {
     let parts = dateStr.split('-');
     let year = parseInt(parts[0]);
@@ -508,14 +505,7 @@ async function exportPDF() {
   }
   
   let queryDate = subtractOneDay(selectedDate);
-  
-  console.log(`📅 你揀嘅日期: ${selectedDate}`);
-  console.log(`📅 實際查詢日期 (減1日): ${queryDate}`);
-  console.log(`📅 cachedData 日期列表:`, cachedData.map(d => d.visit_date));
-  
   let list = cachedData.filter(item => item.visit_date === queryDate);
-  
-  console.log(`📊 符合條件筆數: ${list.length}`);
   
   if (list.length === 0) {
     let availableDates = [...new Set(cachedData.map(d => d.visit_date).filter(d => d))];
@@ -532,7 +522,7 @@ async function exportPDF() {
   
   try {
     const { jsPDF } = window.jspdf;
-    const ROWS_PER_PAGE = 8;
+    const ROWS_PER_PAGE = 12;  // 大字體，每頁顯示 12 個申請
     const totalPages = Math.ceil(list.length / ROWS_PER_PAGE);
     const pdf = new jsPDF('l', 'mm', 'a4');
     
@@ -545,59 +535,69 @@ async function exportPDF() {
       pageData.forEach((item, idx) => {
         const globalIndex = start + idx + 1;
         tableRows += `<tr style="background:#ffffff;">
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${globalIndex}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.ref_no)}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.company)}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.vehicle_no)}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.vehicle_type)}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.contact_person)}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.tel_no)}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${item.visit_time}<\/td>
-          <td style="border:1px solid #000000;padding:8px 5px;vertical-align:top;font-size:11px;">${escapeHtml(item.purpose)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${globalIndex}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.ref_no)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.company)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.vehicle_no)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.vehicle_type)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.contact_person)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.tel_no)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${item.visit_time}<\/td>
+          <td style="border:1px solid #000000;padding:10px 6px;vertical-align:top;font-size:14px;">${escapeHtml(item.purpose)}<\/td>
         <\/tr>`;
       });
       
       const pdfContainer = document.createElement('div');
-      pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1100px;background:white;padding:15px';
+      pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:20px';
       
-      let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:10px;color:#666;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
+      let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:12px;color:#666;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
       
       pdfContainer.innerHTML = `
-        <div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #ccc;padding-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:15px;border-bottom:2px solid #ccc;padding-bottom:10px;">
           <div>
-            <div style="font-size:14px;font-weight:bold;">中國港灣工程有限責任公司</div>
-            <div style="font-size:11px;">China Harbour Engineering Company Limited</div>
-            <div style="font-size:10px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
+            <div style="font-size:18px;font-weight:bold;">中國港灣工程有限責任公司</div>
+            <div style="font-size:14px;">China Harbour Engineering Company Limited</div>
+            <div style="font-size:12px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
           </div>
           <div>
-            <div style="font-size:11px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div>
+            <div style="font-size:14px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div>
           </div>
         </div>
-        <div style="text-align:center;margin:10px 0;">
-          <div style="font-size:18px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
+        <div style="text-align:center;margin:15px 0;">
+          <div style="font-size:22px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:8px 25px;border-radius:35px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
         </div>
-        <div style="font-size:14px;font-weight:bold;text-align:center;margin-bottom:10px;">車輛進入預先登記記錄<br>Registered Vehicle Log</div>
+        <div style="font-size:18px;font-weight:bold;text-align:center;margin-bottom:10px;">車輛進入預先登記記錄</div>
+        <div style="font-size:14px;text-align:center;margin-bottom:15px;color:#555;">Registered Vehicle Log</div>
         ${pageInfo}
-        <table style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;">
+        <table style="width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed;">
           <colgroup>
-            <col style="width:5%"><col style="width:10%"><col style="width:12%"><col style="width:9%"><col style="width:14%"><col style="width:10%"><col style="width:9%"><col style="width:8%"><col style="width:23%">
+            <col style="width:5%">
+            <col style="width:10%">
+            <col style="width:12%">
+            <col style="width:10%">
+            <col style="width:15%">
+            <col style="width:9%">
+            <col style="width:9%">
+            <col style="width:8%">
+            <col style="width:22%">
           </colgroup>
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">項目</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">參考編號</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">公司名稱</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">車牌號碼</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">車輛種類</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">聯絡人</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">電話</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">進入時間</th>
-              <th style="border:1px solid #000;padding:10px 5px;font-weight:bold;font-size:12px;">目的</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">項目<br>Item</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">參考編號<br>Ref No.</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">公司名稱<br>Company</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">車牌號碼<br>Vehicle No.</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">車輛種類<br>Vehicle Type</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">聯絡人<br>Contact</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">電話<br>Tel</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">進入時間<br>Time In</th>
+              <th style="border:1px solid #000;padding:12px 6px;font-weight:bold;font-size:16px;">目的<br>Purpose</th>
             </tr>
           </thead>
           <tbody>${tableRows}</tbody>
         </table>
-        <div style="margin-top:12px;font-size:9px;text-align:center;">系統產生之記錄，請核對無誤後簽署</div>
+        <div style="margin-top:15px;font-size:12px;text-align:center;">系統產生之記錄，請核對無誤後簽署</div>
+        <div style="font-size:10px;text-align:center;">System generated record, please verify before signing</div>
       `;
       
       document.body.appendChild(pdfContainer);
