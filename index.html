@@ -342,7 +342,7 @@ function renderTables() {
   if (!confirmBody) return;
   
   if (confirmed.length === 0) {
-    confirmBody.innerHTML = '<td><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+    confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
       <tr>
@@ -492,13 +492,30 @@ async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
   
-  // ✅ 直接查詢，唔加減（因為 cachedData 入面嘅日期已經正確）
-  let queryDate = selectedDate;
+  // ✅ 關鍵修復：因為 cachedData 入面嘅日期係正確嘅（例如 2026-06-14）
+  // 但 Google Sheets 儲存 UTC 時間，所以要用 subtractOneDay 嚟查詢
+  function subtractOneDay(dateStr) {
+    let parts = dateStr.split('-');
+    let year = parseInt(parts[0]);
+    let month = parseInt(parts[1]);
+    let day = parseInt(parts[2]);
+    let date = new Date(Date.UTC(year, month - 1, day));
+    date.setUTCDate(date.getUTCDate() - 1);
+    let y = date.getUTCFullYear();
+    let m = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    let d = date.getUTCDate().toString().padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  
+  let queryDate = subtractOneDay(selectedDate);
   
   console.log(`📅 你揀嘅日期: ${selectedDate}`);
-  console.log(`📅 實際查詢日期: ${queryDate}`);
+  console.log(`📅 實際查詢日期 (減1日): ${queryDate}`);
+  console.log(`📅 cachedData 日期列表:`, cachedData.map(d => d.visit_date));
   
   let list = cachedData.filter(item => item.visit_date === queryDate);
+  
+  console.log(`📊 符合條件筆數: ${list.length}`);
   
   if (list.length === 0) {
     let availableDates = [...new Set(cachedData.map(d => d.visit_date).filter(d => d))];
