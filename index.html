@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
   <meta charset="UTF-8">
@@ -308,17 +308,17 @@ function logout() {
 
 function loadData() {
   const confirmTable = document.getElementById('confirmedTable');
-  if (confirmTable) confirmTable.innerHTML = '<tr><td colspan="10">⏳ 載入中...<\/td><\/tr>';
+  if (confirmTable) confirmTable.innerHTML = '<tr><td colspan="10">⏳ 載入中...</td></tr>';
   
   fetch(API)
     .then(r => r.json())
     .then(data => {
       if (!Array.isArray(data)) {
-        confirmTable.innerHTML = '<table><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
+        confirmTable.innerHTML = '<tr><td colspan="10" style="color:red">❌ 資料格式錯誤</td></tr>';
         return;
       }
       if (data.length === 0) {
-        confirmTable.innerHTML = '<td><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>';
+        confirmTable.innerHTML = '<tr><td colspan="10">📭 暫無任何登記記錄</td></tr>';
         return;
       }
       cachedData = data.map(item => {
@@ -342,7 +342,7 @@ function loadData() {
     })
     .catch(error => { 
       console.error(error); 
-      confirmTable.innerHTML = `<tr><td colspan="10" style="color:red">❌ 連線失敗: ${error.message}<\/td><\/tr>`;
+      confirmTable.innerHTML = `<tr><td colspan="10" style="color:red">❌ 連線失敗: ${error.message}</td></tr>`;
     });
 }
 
@@ -353,20 +353,20 @@ function renderTables() {
   if (!confirmBody) return;
   
   if (confirmed.length === 0) {
-    confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+    confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛</td></tr>';
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
       <tr>
         <td>${idx+1}</td>
-        <td>${escapeHtml(i.ref_no)}<\/td>
-        <td>${escapeHtml(i.company)}<\/td>
-        <td style="color:#2c7a7b;font-weight:bold;">${escapeHtml(i.vehicle_no)}<\/td>
-        <td>${escapeHtml(i.vehicle_type)}<\/td>
-        <td>${escapeHtml(i.contact_person)}<\/td>
-        <td>${escapeHtml(i.tel_no)}<\/td>
-        <td>${escapeHtml(i.visit_date)}<\/td>
-        <td>${escapeHtml(i.visit_time)}<\/td>
-        <td>${escapeHtml(i.purpose)}<\/td>
+        <td>${escapeHtml(i.ref_no)}</td>
+        <td>${escapeHtml(i.company)}</td>
+        <td style="color:#2c7a7b;font-weight:bold;">${escapeHtml(i.vehicle_no)}</td>
+        <td>${escapeHtml(i.vehicle_type)}</td>
+        <td>${escapeHtml(i.contact_person)}</td>
+        <td>${escapeHtml(i.tel_no)}</td>
+        <td>${escapeHtml(i.visit_date)}</td>
+        <td>${escapeHtml(i.visit_time)}</td>
+        <td>${escapeHtml(i.purpose)}</td>
       </tr>
     `).join('');
   }
@@ -498,7 +498,7 @@ function resetForm() {
   initDatePicker();
 }
 
-// ==================== PDF 匯出 ====================
+// ==================== PDF 匯出 (已修改：無紀錄時只顯示簡潔提示) ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
@@ -519,11 +519,12 @@ async function exportPDF() {
   let queryDate = subtractOneDay(selectedDate);
   let list = cachedData.filter(item => item.visit_date === queryDate);
   
+  // ✅ 修改處：無紀錄時只顯示「沒有 YYYY-MM-DD 的車輛紀錄」，不顯示現有日期清單
   if (list.length === 0) {
-    let availableDates = [...new Set(cachedData.map(d => d.visit_date).filter(d => d))];
-    alert(`沒有 ${selectedDate} 的車輛紀錄\n\n系統中現有日期：${availableDates.join(', ')}`);
+    alert(`沒有 ${selectedDate} 的車輛紀錄`);
     return;
   }
+  
   if (!confirm(`確認匯出 ${selectedDate} 的 ${list.length} 筆紀錄？`)) return;
   
   let loadingDiv = document.createElement('div');
@@ -604,7 +605,7 @@ async function exportPDF() {
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">電話<br>Tel</th>
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">進入時間<br>Time In</th>
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">目的<br>Purpose</th>
-            <tr>
+            </tr>
           </thead>
           <tbody>${tableRows}</tbody>
         </table>
