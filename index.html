@@ -298,11 +298,11 @@ function loadData() {
     .then(r => r.json())
     .then(data => {
       if (!Array.isArray(data)) {
-        confirmTable.innerHTML = '<tr><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
+        confirmTable.innerHTML = '</td><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
         return;
       }
       if (data.length === 0) {
-        confirmTable.innerHTML = '<tr><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>';
+        confirmTable.innerHTML = '</table><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>';
         return;
       }
       cachedData = data.map(item => {
@@ -337,7 +337,7 @@ function renderTables() {
   if (!confirmBody) return;
   
   if (confirmed.length === 0) {
-    confirmBody.innerHTML = '<td><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+    confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
       <tr>
@@ -531,15 +531,15 @@ async function exportPDF() {
       pageData.forEach((item, idx) => {
         const globalIndex = start + idx + 1;
         tableRows += `<tr style="background:#ffffff;">
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${globalIndex}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.ref_no)}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.company)}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.vehicle_no)}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.vehicle_type)}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.contact_person)}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.tel_no)}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${item.visit_time}<\/td>
-          <td style="border:1px solid #000000;padding:7px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.purpose)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${globalIndex}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.ref_no)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.company)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.vehicle_no)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.vehicle_type)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.contact_person)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.tel_no)}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${item.visit_time}<\/td>
+          <td style="border:1px solid #000000;padding:10px 4px;vertical-align:top;font-size:14px;">${escapeHtml(item.purpose)}<\/td>
         <\/tr>`;
       });
       
@@ -555,7 +555,7 @@ async function exportPDF() {
             <div style="font-size:12px;">China Harbour Engineering Company Limited</div>
             <div style="font-size:11px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
           </div>
-          <div style="text-align:right;margin-bottom:12px;">
+          <div style="text-align:right;margin-bottom:4px;">
             <div style="font-size:12px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div>
           </div>
         </div>
@@ -588,7 +588,7 @@ async function exportPDF() {
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">電話<br>Tel</th>
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">進入時間<br>Time In</th>
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">目的<br>Purpose</th>
-            </tr>
+            </table>
           </thead>
           <tbody>${tableRows}</tbody>
         </table>
