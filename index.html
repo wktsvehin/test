@@ -168,11 +168,15 @@ let pendingSubmissionData = null;
 
 // ==================== 輔助函數 ====================
 
+// ✅ 修復：今日日期減 1 日（因為系統比實際多咗 1 日）
 function getTodayString() {
   let now = new Date();
-  let year = now.getFullYear();
-  let month = (now.getMonth() + 1).toString().padStart(2, '0');
-  let day = now.getDate().toString().padStart(2, '0');
+  let correctedDate = new Date(now);
+  correctedDate.setDate(now.getDate() - 1);
+  let year = correctedDate.getFullYear();
+  let month = (correctedDate.getMonth() + 1).toString().padStart(2, '0');
+  let day = correctedDate.getDate().toString().padStart(2, '0');
+  console.log(`📅 今日日期 (修正後): ${year}-${month}-${day}`);
   return `${year}-${month}-${day}`;
 }
 
@@ -180,7 +184,7 @@ function getCurrentHour() {
   return new Date().getHours();
 }
 
-// ✅ 簡化：直接提取日期，唔減日（避免雙重減日）
+// 直接提取日期
 function extractDateOnly(dateStr) {
   if (!dateStr) return '';
   let str = String(dateStr).trim();
@@ -192,7 +196,7 @@ function extractDateOnly(dateStr) {
   return str;
 }
 
-// ✅ 時間處理：減 23 分鐘，向下取整到 15 分鐘
+// 時間處理：減 23 分鐘，向下取整到 15 分鐘
 function formatTimeOnly(timeStr) {
   if (!timeStr) return '---';
   let str = String(timeStr);
@@ -249,7 +253,6 @@ function initTimeSelects() {
   ['00', '15', '30', '45'].forEach(v => m.appendChild(new Option(v, v)));
 }
 
-// ✅ 修復 switchTab 函數
 function switchTab(t) {
   let v = document.getElementById('visitorPanel'), s = document.getElementById('staffPanel'), bv = document.getElementById('btnVisitor'), bs = document.getElementById('btnStaff');
   if (t === 'visitor') {
@@ -292,7 +295,6 @@ function logout() {
   showLogin(); 
 }
 
-// ✅ 修復 loadData 函數
 function loadData() {
   const confirmTable = document.getElementById('confirmedTable');
   if (confirmTable) confirmTable.innerHTML = '<tr><td colspan="10">⏳ 載入中...<\/td><\/tr>';
@@ -301,7 +303,7 @@ function loadData() {
     .then(r => r.json())
     .then(data => {
       if (!Array.isArray(data)) {
-        confirmTable.innerHTML = '<table><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
+        confirmTable.innerHTML = '<tr><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
         return;
       }
       if (data.length === 0) {
@@ -340,7 +342,7 @@ function renderTables() {
   if (!confirmBody) return;
   
   if (confirmed.length === 0) {
-    confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+    confirmBody.innerHTML = '<td><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
       <tr>
@@ -368,7 +370,6 @@ function filterTable() {
   });
 }
 
-// ✅ 修復 escapeHtml 函數
 function escapeHtml(str) {
   if (!str) return '';
   return String(str).replace(/[&<>]/g, function(m) {
@@ -491,8 +492,13 @@ async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
   
-  // 直接比對，唔再減日（因為 cachedData 嘅日期已經正確）
-  let list = cachedData.filter(item => item.visit_date === selectedDate);
+  // ✅ 直接查詢，唔加減（因為 cachedData 入面嘅日期已經正確）
+  let queryDate = selectedDate;
+  
+  console.log(`📅 你揀嘅日期: ${selectedDate}`);
+  console.log(`📅 實際查詢日期: ${queryDate}`);
+  
+  let list = cachedData.filter(item => item.visit_date === queryDate);
   
   if (list.length === 0) {
     let availableDates = [...new Set(cachedData.map(d => d.visit_date).filter(d => d))];
