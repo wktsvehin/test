@@ -21,6 +21,12 @@
     .btn-tab .chi-text, .btn-tab .eng-text { color: inherit; }
     .btn-tab.active .chi-text, .btn-tab.active .eng-text,
     .btn-tab.staff .chi-text, .btn-tab.staff .eng-text { color: #ffffff; }
+    /* 訪客頁面英文大一倍（except input box） */
+    .visitor-eng-text { font-size: 0.9rem; color: #718096; display: block; }
+    .form-group .eng-text { font-size: 0.7rem; color: #718096; display: block; }
+    .form-group .visitor-eng-text { font-size: 0.7rem; }
+    .alert-cutoff .eng-text, .alert-reminder .eng-text { font-size: 0.9rem; }
+    .btn-tab .eng-text { font-size: 0.9rem; }
     .form-group { margin-bottom: 20px; }
     .form-label { display: block; font-weight: 600; font-size: 0.9rem; color: #2d3748; }
     .form-sub { font-size: 0.7rem; color: #718096; display: block; }
@@ -51,6 +57,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 950px; }
     th, td { padding: 8px 6px; text-align: center; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
     th { background: #f1f5f9; font-weight: 600; }
+    /* 讓 # 號碼對齊 */
+    td:first-child, th:first-child { text-align: center; }
     .section-title { color: #2c7a7b; font-weight: bold; margin: 16px 0 12px; padding-left: 8px; border-left: 4px solid #319795; font-size: 1rem; }
     .section-title .eng-text { font-size: 0.7rem; font-weight: normal; }
     .plate-input { text-transform: uppercase; font-weight: bold; }
@@ -74,15 +82,19 @@
 <p class="text-center" style="color:#718096;font-size:0.75rem;margin-bottom:20px;">West Kowloon Transfer Station Vehicle Registration</p>
 
 <div class="flex" style="margin-bottom:20px;">
-  <div id="btnVisitor" class="btn-tab active" onclick="switchTab('visitor')"><span class="chi-text">訪客登記</span><span class="eng-text">Visitor Registration</span></div>
-  <div id="btnStaff" class="btn-tab staff" onclick="switchTab('staff')"><span class="chi-text">職員專用</span><span class="eng-text">Staff Only</span></div>
+  <div id="btnVisitor" class="btn-tab active" onclick="switchTab('visitor')"><span class="chi-text">訪客登記</span><span class="eng-text" style="font-size:0.9rem;">Visitor Registration</span></div>
+  <div id="btnStaff" class="btn-tab staff" onclick="switchTab('staff')"><span class="chi-text">職員專用</span><span class="eng-text" style="font-size:0.9rem;">Staff Only</span></div>
 </div>
 
 <!-- 訪客面板 -->
 <div id="visitorPanel">
   <div id="formSection" class="card">
-    <div class="alert-cutoff"><div style="font-weight:bold;">⏰ 預約截數提示：每天下午3:00截數</div><div class="eng-text">Cut-off: 3:00 PM daily | Before Next day | After Day after next</div></div>
-    <div class="alert-reminder"><div style="font-weight:bold;">📋 注意事項：</div><div>請提供準確資料，資料只作入站核對之用</div><div class="eng-text">Please provide accurate information for entry verification only.</div></div>
+    <div class="alert-cutoff">
+      <div style="font-weight:bold;">預約截數提示：</div>
+      <div>每天下午3:00截數</div>
+      <div class="eng-text" style="font-size:0.9rem;">Cut-off: 3:00 PM daily | Before > Next day | After > Day after next |</div>
+    </div>
+    <div class="alert-reminder"><div style="font-weight:bold;">📋 注意事項：</div><div>請提供準確資料，資料只作入站核對之用</div><div class="eng-text" style="font-size:0.9rem;">Please provide accurate information. It will only be used in verification.</div></div>
     <form id="regForm" onsubmit="showPreview(event)">
       <div class="form-group"><label class="form-label">🏢 公司名 <span class="form-sub">Company Name</span></label><input type="text" class="form-control" id="company" placeholder="e.g. China Harbour Engineering" required></div>
       <div class="form-group"><label class="form-label">🚗 車牌號碼 <span class="form-sub">Vehicle No.</span></label><input type="text" class="form-control plate-input" id="vehicleNo" placeholder="AB1234" required></div>
@@ -99,7 +111,7 @@
   </div>
   <div id="previewSection" class="card hidden">
     <h3 class="text-center mb-2">✅ 請核對資料 / Verify Information</h3>
-    <div class="alert-reminder" style="background:#ffff3d;border-left-color:#f0ad4e"><div style="font-weight:bold;">⚠️ 重要提醒：</div><div>請核對所有資料無誤後提交</div><div class="eng-text">Please verify all information before submission.</div></div>
+    <div class="alert-reminder" style="background:#ffff3d;border-left-color:#f0ad4e"><div style="font-weight:bold;">⚠️ 重要提醒：</div><div>請核對所有資料無誤後提交</div><div class="eng-text" style="font-size:0.9rem;">Please verify all information before submission.</div></div>
     <div class="preview-box">
       <div class="preview-row"><span class="preview-label">🏢 公司/Company :</span><span id="pCompany" class="preview-value"></span></div>
       <div class="preview-row"><span class="preview-label">🚗 車牌/Vehicle No. :</span><span id="pVehicle" class="preview-value"></span></div>
@@ -132,7 +144,7 @@
     </div>
     
     <div class="search-wrapper">
-      <input type="text" id="searchInput" class="form-control plate-input-search mb-3" placeholder="🔍 搜尋車牌 / Search Vehicle No." oninput="filterTable()">
+      <input type="text" id="searchInput" class="form-control plate-input-search mb-3" placeholder="搜尋今天入站車牌 / Search Today's Vehicle No." oninput="filterTable()">
     </div>
     
     <div class="section-title icon-text">✅ 今日已確認名單 <span class="eng-text">Today's Confirmed List</span></div>
@@ -140,7 +152,7 @@
       <table>
         <thead>
           <tr>
-            <th>#</th>
+            <th style="text-align:center;">#</th>
             <th>📄 參考編號<br>Ref No.</th>
             <th>🏢 公司<br>Company</th>
             <th>🚗 車牌<br>Vehicle No.</th>
@@ -253,6 +265,10 @@ function switchTab(t) {
   if (t === 'visitor') {
     v.style.display = 'block'; s.style.display = 'none';
     bv.classList.add('active'); bs.classList.remove('active');
+    // ✅ 返回到訪客登記頁面時自動登出
+    if (isLoggedIn) {
+      logout();
+    }
   } else {
     v.style.display = 'none'; s.style.display = 'block';
     bs.classList.add('active'); bv.classList.remove('active');
@@ -298,11 +314,11 @@ function loadData() {
     .then(r => r.json())
     .then(data => {
       if (!Array.isArray(data)) {
-        confirmTable.innerHTML = '<tr><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
+        confirmTable.innerHTML = '<table><td colspan="10" style="color:red">❌ 資料格式錯誤<\/td><\/tr>';
         return;
       }
       if (data.length === 0) {
-        confirmTable.innerHTML = '<tr><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>';
+        confirmTable.innerHTML = '<td><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>';
         return;
       }
       cachedData = data.map(item => {
@@ -340,7 +356,7 @@ function renderTables() {
     confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
-      <td>
+      <tr>
         <td>${idx+1}</td>
         <td>${escapeHtml(i.ref_no)}<\/td>
         <td>${escapeHtml(i.company)}<\/td>
@@ -588,7 +604,7 @@ async function exportPDF() {
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">電話<br>Tel</th>
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">進入時間<br>Time In</th>
               <th style="border:1px solid #000;padding:8px 4px;font-weight:bold;font-size:15px;">目的<br>Purpose</th>
-            </tr>
+            <tr>
           </thead>
           <tbody>${tableRows}</tbody>
         </table>
