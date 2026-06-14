@@ -22,7 +22,6 @@
     .btn-tab.active .chi-text, .btn-tab.active .eng-text,
     .btn-tab.staff .chi-text, .btn-tab.staff .eng-text { color: #ffffff; }
     
-    /* 訪客頁面：英文與中文相同大小 */
     .alert-cutoff .eng-text, 
     .alert-reminder .eng-text { font-size: inherit !important; line-height: 1.3; }
     .form-group .form-sub,
@@ -38,12 +37,10 @@
     .alert-reminder div.eng-text,
     .alert-cutoff div.eng-text { font-size: inherit !important; }
     
-    /* 職員頁面英文維持原樣 */
     #staffPanel .eng-text { font-size: 0.7rem !important; }
     #staffPanel .btn-success .eng-text,
     #staffPanel .btn-outline .eng-text { font-size: 0.9rem !important; }
     
-    /* 預覽頁面按鈕：字體大小與 Staff Only 按鈕相同 */
     .preview-section-buttons .btn-secondary .chi-text,
     .preview-section-buttons .btn-secondary .eng-text,
     .preview-section-buttons .btn-success .chi-text,
@@ -52,7 +49,6 @@
     .new-app-btn .chi-text,
     .new-app-btn .eng-text { font-size: 0.9rem !important; }
     
-    /* 多日期選擇區 */
     .date-checkbox-group {
       display: flex;
       flex-wrap: wrap;
@@ -79,67 +75,60 @@
       border-color: #236162;
       color: white;
     }
-    .date-checkbox-item.selected .date-text {
-      color: white;
-    }
-    .date-checkbox-item input {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: #2c7a7b;
-    }
-    .date-text {
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    .selected-dates-hint {
-      margin-top: 8px;
-      font-size: 0.75rem;
-      color: #2c7a7b;
-    }
+    .date-checkbox-item.selected .date-text { color: white; }
+    .date-checkbox-item input { width: 18px; height: 18px; cursor: pointer; accent-color: #2c7a7b; }
+    .date-text { font-size: 0.9rem; font-weight: 500; }
+    .selected-dates-hint { margin-top: 8px; font-size: 0.75rem; color: #2c7a7b; }
     
-    /* 成功頁面表格 */
+    .ref-box {
+      background: #f0fff4;
+      border: 2px dashed #38a169;
+      border-radius: 20px;
+      padding: 20px 16px;
+      text-align: center;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
     .success-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 16px 0;
-      font-size: 0.85rem;
+      margin: 12px 0;
+      font-size: 0.8rem;
+      table-layout: fixed;
     }
     .success-table th,
     .success-table td {
       border: 1px solid #cbd5e0;
-      padding: 10px 8px;
+      padding: 8px 6px;
       text-align: left;
+      word-break: break-word;
     }
     .success-table th {
       background: #e6f7f7;
       font-weight: 600;
+      width: 50%;
     }
     .reminder-box {
       background: #fefce8;
       border-left: 4px solid #eab308;
-      padding: 12px;
+      padding: 10px 12px;
       border-radius: 10px;
-      margin: 16px 0;
+      margin: 12px 0;
+      text-align: left;
     }
     
-    /* 手機版垂直列表 */
     @media (max-width: 480px) {
-      .success-table thead {
-        display: none;
-      }
-      .success-table,
-      .success-table tbody,
-      .success-table tr,
-      .success-table td {
+      .success-table thead { display: none; }
+      .success-table, .success-table tbody, .success-table tr, .success-table td {
         display: block;
         width: 100%;
       }
       .success-table tr {
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         border: 1px solid #cbd5e0;
         border-radius: 12px;
-        padding: 10px;
+        padding: 8px;
+        background: white;
       }
       .success-table td {
         border: none;
@@ -151,16 +140,12 @@
         content: attr(data-label);
         font-weight: 600;
         color: #2c7a7b;
+        margin-right: 10px;
       }
-      .date-checkbox-group {
-        gap: 8px;
-      }
-      .date-checkbox-item {
-        padding: 6px 12px;
-      }
-      .date-text {
-        font-size: 0.8rem;
-      }
+      .date-checkbox-group { gap: 8px; }
+      .date-checkbox-item { padding: 6px 12px; }
+      .date-text { font-size: 0.8rem; }
+      .ref-box { padding: 16px 12px; }
     }
     
     .form-group { margin-bottom: 20px; }
@@ -183,7 +168,6 @@
     .preview-row { display: flex; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
     .preview-label { width: 38%; font-weight: 600; color: #2c7a7b; }
     .preview-value { width: 62%; color: #2d3748; }
-    .ref-box { background: #f0fff4; border: 2px dashed #38a169; border-radius: 20px; padding: 24px; text-align: center; }
     .flex { display: flex; gap: 12px; flex-wrap: wrap; }
     .text-center { text-align: center; }
     .mb-2 { margin-bottom: 16px; }
@@ -206,11 +190,18 @@
     .plate-input-search { padding-left: 12px !important; }
     .icon-text { display: inline-flex; align-items: center; gap: 6px; }
     
-    /* 首頁英文副標題放大50% */
     .subtitle-eng {
       font-size: 1.125rem !important;
       color: #718096;
       margin-bottom: 20px;
+    }
+    
+    /* 時間選填提示樣式 */
+    .optional-badge {
+      font-size: 0.7rem;
+      color: #38a169;
+      margin-left: 8px;
+      font-weight: normal;
     }
     
     @media (max-width:480px) { 
@@ -254,16 +245,25 @@
       <div class="form-group"><label class="form-label">📦 進入目的/工作内容 <span class="form-sub">Purpose/Work Description</span></label><input type="text" class="form-control" id="purpose" placeholder="送貨 / Goods Delivery" required></div>
       <div class="form-group"><label class="form-label">🚙 車輛種類 <span class="form-sub">Vehicle Type</span></label><select class="form-select" id="vehicleType" required><option value="">請選擇/Select</option><option>私家車/Private Car</option><option>客貨車/Van</option><option>中型貨車/Medium Truck</option><option>重型貨車/Heavy Truck</option><option>工程車/Engineering Vehicle</option><option>其他/Other</option></select></div>
       
-      <!-- 多日期選擇區 -->
       <div class="form-group">
         <label class="form-label">📅 預計到訪日期（可選多日）<span class="form-sub">Visit Date (Multiple days, max 7 days)</span></label>
-        <div id="dateCheckboxGroup" class="date-checkbox-group">
-          <!-- 動態產生 checkbox 日期列表 -->
-        </div>
+        <div id="dateCheckboxGroup" class="date-checkbox-group"></div>
         <div id="selectedDatesHint" class="selected-dates-hint"></div>
       </div>
       
-      <div class="form-group"><label class="form-label">⏱️ 預計到訪時間 <span class="form-sub">ETA (24h)</span></label><div class="flex"><select id="hour" class="form-select" style="flex:1"></select><span style="font-size:1.5rem;">:</span><select id="minute" class="form-select" style="flex:1"></select></div></div>
+      <div class="form-group">
+        <label class="form-label">⏱️ 預計到訪時間 <span class="form-sub">ETA (24h)</span> <span class="optional-badge">(選填 / Optional)</span></label>
+        <div class="flex">
+          <select id="hour" class="form-select" style="flex:1">
+            <option value="">時</option>
+          </select>
+          <span style="font-size:1.5rem;">:</span>
+          <select id="minute" class="form-select" style="flex:1">
+            <option value="">分</option>
+          </select>
+        </div>
+      </div>
+      
       <button type="submit" class="btn-gold mt-2"><span class="chi-text">📮 提交申請</span><span class="eng-text">Application Submission</span></button>
     </form>
   </div>
@@ -294,7 +294,7 @@
   <div id="successSection" class="card hidden">
     <div class="ref-box">
       <h3 style="color:#38a169;">🎉 登記申請已送出</h3>
-      <table id="successRefTable" class="success-table" style="margin: 16px 0;">
+      <table id="successRefTable" class="success-table">
         <thead>
           <tr><th>到訪日期 / Date</th><th>參考編號 / Ref No.</th></tr>
         </thead>
@@ -345,8 +345,8 @@ let cachedData = [];
 let isSubmitting = false;
 const API = "https://script.google.com/macros/s/AKfycbxzWm4hBTMZVKjZUv_0pLjKrp_VrDxCfmi6aLUVa4nB-x0N0MyEdDlSefU69MmbGb1D/exec";
 let pendingSubmissionData = null;
-let selectedDates = [];      // 儲存選擇的日期 (YYYY-MM-DD)
-let availableDates = [];     // 儲存可選的日期列表
+let selectedDates = [];
+let availableDates = [];
 
 // ==================== 輔助函數 ====================
 
@@ -402,7 +402,6 @@ function initTimeSelects() {
   ['00', '15', '30', '45'].forEach(v => m.appendChild(new Option(v, v)));
 }
 
-// 計算截數後的可選日期 (今天3pm後 -> 後天起計7天)
 function generateAvailableDates() {
   let now = new Date();
   let currentHour = now.getHours();
@@ -422,7 +421,6 @@ function generateAvailableDates() {
   return dates;
 }
 
-// 渲染多日期 checkbox
 function renderDateCheckboxes() {
   availableDates = generateAvailableDates();
   const container = document.getElementById('dateCheckboxGroup');
@@ -442,7 +440,6 @@ function renderDateCheckboxes() {
         selectedDates = selectedDates.filter(d => d !== this.value);
       }
       updateSelectedHint();
-      // 更新樣式
       if (this.checked) label.classList.add('selected');
       else label.classList.remove('selected');
     });
@@ -466,44 +463,42 @@ function updateSelectedHint() {
   }
 }
 
-// 檢查重複日期 (從 Google Sheets 比對)
-async function checkDuplicateDates(vehicleNo, dates) {
-  // 先確保有最新數據
-  if (cachedData.length === 0) {
-    await loadDataSilent();
+// 從 Google Sheets 載入資料（強制刷新）
+async function loadFreshData() {
+  try {
+    const response = await fetch(API);
+    const data = await response.json();
+    if (Array.isArray(data)) {
+      cachedData = data.map(item => {
+        let rawDate = item.visit_date || item.到訪日期 || item.date || '';
+        let rawTime = item.time_in || item.入站時間 || '';
+        return {
+          ref_no: item.ref_no || item.參考編號 || '',
+          company: item.company || item.公司 || '',
+          vehicle_no: (item.vehicle_no || item.車牌 || '').toUpperCase(),
+          vehicle_type: item.vehicle_type || item.車型 || '',
+          contact_person: item.contact_person || item.聯絡人 || '',
+          tel_no: item.tel_no || item.電話 || '',
+          visit_time: formatTimeOnly(rawTime),
+          purpose: item.purpose || item.目的 || '',
+          visit_date: extractDateOnly(rawDate)
+        };
+      });
+    }
+    return cachedData;
+  } catch (error) {
+    console.error("載入資料失敗:", error);
+    return [];
   }
-  const existingDates = cachedData
-    .filter(item => item.vehicle_no === vehicleNo)
-    .map(item => item.visit_date);
-  const conflictDates = dates.filter(d => existingDates.includes(d));
-  return conflictDates;
 }
 
-function loadDataSilent() {
-  return fetch(API)
-    .then(r => r.json())
-    .then(data => {
-      if (Array.isArray(data)) {
-        cachedData = data.map(item => {
-          let rawDate = item.visit_date || item.到訪日期 || item.date || '';
-          let rawTime = item.time_in || item.入站時間 || '';
-          let extractedDate = extractDateOnly(rawDate);
-          let formattedTime = formatTimeOnly(rawTime);
-          return {
-            ref_no: item.ref_no || item.參考編號 || '',
-            company: item.company || item.公司 || '',
-            vehicle_no: item.vehicle_no || item.車牌 || '',
-            vehicle_type: item.vehicle_type || item.車型 || '',
-            contact_person: item.contact_person || item.聯絡人 || '',
-            tel_no: item.tel_no || item.電話 || '',
-            visit_time: formattedTime,
-            purpose: item.purpose || item.目的 || '',
-            visit_date: extractedDate
-          };
-        });
-      }
-    })
-    .catch(() => {});
+// 檢查重複日期（使用最新資料）
+async function checkDuplicateDates(vehicleNo, dates) {
+  await loadFreshData();
+  const existingDates = cachedData
+    .filter(item => item.vehicle_no.toUpperCase() === vehicleNo.toUpperCase())
+    .map(item => item.visit_date);
+  return dates.filter(d => existingDates.includes(d));
 }
 
 function switchTab(t) {
@@ -512,7 +507,7 @@ function switchTab(t) {
     v.style.display = 'block'; s.style.display = 'none';
     bv.classList.add('active'); bs.classList.remove('active');
     if (isLoggedIn) logout();
-    renderDateCheckboxes();  // 重新整理日期
+    renderDateCheckboxes();
   } else {
     v.style.display = 'none'; s.style.display = 'block';
     bs.classList.add('active'); bv.classList.remove('active');
@@ -551,22 +546,20 @@ function loadData() {
     cachedData = data.map(item => {
       let rawDate = item.visit_date || item.到訪日期 || item.date || '';
       let rawTime = item.time_in || item.入站時間 || '';
-      let extractedDate = extractDateOnly(rawDate);
-      let formattedTime = formatTimeOnly(rawTime);
       return {
         ref_no: item.ref_no || item.參考編號 || '',
         company: item.company || item.公司 || '',
-        vehicle_no: item.vehicle_no || item.車牌 || '',
+        vehicle_no: (item.vehicle_no || item.車牌 || '').toUpperCase(),
         vehicle_type: item.vehicle_type || item.車型 || '',
         contact_person: item.contact_person || item.聯絡人 || '',
         tel_no: item.tel_no || item.電話 || '',
-        visit_time: formattedTime,
+        visit_time: formatTimeOnly(rawTime),
         purpose: item.purpose || item.目的 || '',
-        visit_date: extractedDate
+        visit_date: extractDateOnly(rawDate)
       };
     });
     renderTables();
-  }).catch(error => { confirmTable.innerHTML = `<table><td colspan="10">❌ 連線失敗: ${error.message}<\/td><\/tr>`; });
+  }).catch(error => { confirmTable.innerHTML = `<tr><td colspan="10">❌ 連線失敗: ${error.message}<\/td><\/tr>`; });
 }
 
 function renderTables() {
@@ -589,12 +582,7 @@ function filterTable() {
 
 function escapeHtml(str) {
   if (!str) return '';
-  return String(str).replace(/[&<>]/g, function(m) {
-    if (m === '&') return '&amp;';
-    if (m === '<') return '&lt;';
-    if (m === '>') return '&gt;';
-    return m;
-  });
+  return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
 }
 
 function showLoading(show, message) {
@@ -606,12 +594,11 @@ function showLoading(show, message) {
     div.className = 'loading-overlay';
     div.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><div>${message || '處理中...'}</div></div>`;
     document.body.appendChild(div);
-  } else {
-    if (existing) existing.remove();
-  }
+  } else if (existing) existing.remove();
 }
 
-function submitToGoogleSheet(formData, refNo, date) {
+// 提交單一日期到 Google Sheets
+async function submitToGoogleSheet(formData, refNo, date) {
   return new Promise((resolve) => {
     const params = new URLSearchParams();
     params.append('ref_no', refNo);
@@ -623,10 +610,19 @@ function submitToGoogleSheet(formData, refNo, date) {
     params.append('purpose', formData.purpose);
     params.append('vehicle_type', formData.vehicleType);
     params.append('visit_date', date);
+    
     const url = `${API}?${params.toString()}`;
+    console.log("提交到:", url);
+    
     fetch(url, { method: 'GET', mode: 'no-cors' })
-      .then(() => resolve({ success: true, refNo: refNo, date: date }))
-      .catch(() => resolve({ success: true, refNo: refNo, date: date }));
+      .then(() => {
+        console.log(`提交成功: ${date} -> ${refNo}`);
+        resolve({ success: true, refNo, date });
+      })
+      .catch((err) => {
+        console.error(`提交失敗 ${date}:`, err);
+        resolve({ success: true, refNo, date });
+      });
   });
 }
 
@@ -641,9 +637,12 @@ function generateRefNo() {
   return `${year}${month}${day}-${randomStr}`;
 }
 
+// ==================== 主要流程 ====================
+
 async function showPreview(e) {
   e.preventDefault();
-  // 驗證基本欄位
+  
+  // 獲取表單資料
   let c = document.getElementById('company').value.trim();
   let v = document.getElementById('vehicleNo').value.trim().toUpperCase();
   let cp = document.getElementById('contactPerson').value.trim();
@@ -652,47 +651,86 @@ async function showPreview(e) {
   let vt = document.getElementById('vehicleType').value;
   let h = document.getElementById('hour').value;
   let m = document.getElementById('minute').value;
-  let tm = (h && m) ? `${h}:${m}` : '未選';
   
-  if (!c || !v || !cp || !t || !p || !vt) { alert('請填寫所有欄位'); return false; }
-  if (selectedDates.length === 0) { alert('請至少選擇一個到訪日期'); return false; }
+  // 時間處理：如果沒有選擇時或分，則儲存空字串
+  let tm = '';
+  if (h && m) {
+    tm = `${h}:${m}`;
+  } else if (h && !m) {
+    tm = `${h}:00`;
+  } else if (!h && m) {
+    tm = `00:${m}`;
+  }
+  // 如果 tm 是空字串，表示沒有輸入時間
+  
+  // 驗證基本欄位（時間除外，因為是選填）
+  if (!c || !v || !cp || !t || !p || !vt) { 
+    alert('請填寫所有欄位 / Please fill in all fields'); 
+    return false; 
+  }
+  if (selectedDates.length === 0) { 
+    alert('請至少選擇一個到訪日期 / Please select at least one date'); 
+    return false; 
+  }
+  
+  showLoading(true, '檢查重複登記...');
   
   // 檢查重複日期
-  showLoading(true, '檢查重複登記...');
   const conflictDates = await checkDuplicateDates(v, selectedDates);
+  
   showLoading(false);
   
-  let finalDates = [...selectedDates];
+  // 如果有衝突日期
   if (conflictDates.length > 0) {
-    alert(`⚠️ 以下日期已有登記，已自動移除：${conflictDates.join(', ')}\n\n請重新選擇其他日期。`);
-    finalDates = finalDates.filter(d => !conflictDates.includes(d));
-    if (finalDates.length === 0) {
+    alert(`⚠️ 以下日期已有 ${v} 的登記，已自動移除：\n${conflictDates.join(', ')}\n\n請重新選擇其他日期。`);
+    
+    const newSelectedDates = selectedDates.filter(d => !conflictDates.includes(d));
+    
+    if (newSelectedDates.length === 0) {
       alert('所有選擇的日期都已有登記，無法提交。');
       return false;
     }
-    // 更新 UI 中的 checkbox 狀態
-    selectedDates = finalDates;
+    
+    selectedDates = newSelectedDates;
     updateSelectedHint();
-    // 同步更新 checkbox 視覺
+    
     document.querySelectorAll('.date-checkbox-item input').forEach(cb => {
-      if (finalDates.includes(cb.value)) cb.checked = true;
-      else cb.checked = false;
+      cb.checked = selectedDates.includes(cb.value);
+      if (cb.checked) {
+        cb.parentElement.classList.add('selected');
+      } else {
+        cb.parentElement.classList.remove('selected');
+      }
     });
+    
+    alert(`已移除衝突日期。現在將預約：${selectedDates.join(', ')}`);
   }
   
-  pendingSubmissionData = { company: c, vehicleNo: v, contactPerson: cp, telNo: t, purpose: p, vehicleType: vt, visitTime: tm, dates: finalDates };
+  // 儲存待提交資料（時間可能為空字串）
+  pendingSubmissionData = { 
+    company: c, 
+    vehicleNo: v, 
+    contactPerson: cp, 
+    telNo: t, 
+    purpose: p, 
+    vehicleType: vt, 
+    visitTime: tm,  // 可能是空字串
+    dates: [...selectedDates]
+  };
   
+  // 顯示預覽
   document.getElementById('pCompany').innerText = c;
   document.getElementById('pVehicle').innerText = v;
   document.getElementById('pContact').innerText = cp;
   document.getElementById('pTel').innerText = t;
   document.getElementById('pPurpose').innerText = p;
   document.getElementById('pType').innerText = vt;
-  document.getElementById('pDateList').innerHTML = finalDates.map(d => `${d}`).join('<br>');
-  document.getElementById('pTime').innerText = tm;
+  document.getElementById('pDateList').innerHTML = selectedDates.map(d => `${d}`).join('<br>');
+  document.getElementById('pTime').innerText = tm || '未填 / Not specified';
   
   document.getElementById('formSection').classList.add('hidden');
   document.getElementById('previewSection').classList.remove('hidden');
+  
   return false;
 }
 
@@ -703,24 +741,48 @@ function backToForm() {
 }
 
 async function submitFinal() {
-  if (isSubmitting) return;
+  if (isSubmitting) {
+    alert('正在提交中，請稍後...');
+    return;
+  }
+  
   if (!pendingSubmissionData || !pendingSubmissionData.dates || pendingSubmissionData.dates.length === 0) {
     alert('沒有可提交的資料');
     return;
   }
+  
   isSubmitting = true;
-  showLoading(true, '正在提交...');
+  showLoading(true, '正在提交資料到伺服器...');
   
   const results = [];
+  let hasError = false;
+  
+  // 逐個日期提交
   for (const date of pendingSubmissionData.dates) {
     const refNo = generateRefNo();
-    await submitToGoogleSheet(pendingSubmissionData, refNo, date);
-    results.push({ date: date, refNo: refNo });
+    try {
+      await submitToGoogleSheet(pendingSubmissionData, refNo, date);
+      results.push({ date, refNo });
+      console.log(`✅ 已提交: ${date} -> ${refNo}`);
+    } catch (error) {
+      console.error(`❌ 提交失敗: ${date}`, error);
+      hasError = true;
+    }
   }
   
   showLoading(false);
   
-  // 顯示成功頁面 (表格格式)
+  if (hasError && results.length === 0) {
+    alert('提交失敗，請稍後再試。');
+    isSubmitting = false;
+    return;
+  }
+  
+  if (hasError && results.length > 0) {
+    alert(`部分日期提交成功，部分失敗。成功的日期：${results.map(r => r.date).join(', ')}`);
+  }
+  
+  // 顯示成功頁面
   const tbody = document.querySelector('#successRefTable tbody');
   tbody.innerHTML = '';
   results.forEach(r => {
@@ -729,18 +791,24 @@ async function submitFinal() {
     const cellRef = row.insertCell(1);
     cellDate.innerText = r.date;
     cellRef.innerText = r.refNo;
-    // 手機版 data-label
     cellDate.setAttribute('data-label', '到訪日期 / Date');
     cellRef.setAttribute('data-label', '參考編號 / Ref No.');
   });
   
   document.getElementById('previewSection').classList.add('hidden');
   document.getElementById('successSection').classList.remove('hidden');
+  
   pendingSubmissionData = null;
   
-  // 重新整理日期列表 (清空選擇)
+  // 重置表單
+  document.getElementById('regForm').reset();
   renderDateCheckboxes();
+  // 重置時間選擇器
+  document.getElementById('hour').value = '';
+  document.getElementById('minute').value = '';
+  
   if (isLoggedIn) loadData();
+  
   isSubmitting = false;
 }
 
@@ -750,7 +818,6 @@ function resetForm() {
   document.getElementById('formSection').classList.remove('hidden');
   pendingSubmissionData = null;
   renderDateCheckboxes();
-  // 重置時間選擇
   document.getElementById('hour').value = '';
   document.getElementById('minute').value = '';
 }
@@ -759,30 +826,35 @@ function resetForm() {
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
+  
   function subtractOneDay(dateStr) {
     let parts = dateStr.split('-');
-    let year = parseInt(parts[0]), month = parseInt(parts[1]), day = parseInt(parts[2]);
-    let date = new Date(Date.UTC(year, month - 1, day));
+    let date = new Date(Date.UTC(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2])));
     date.setUTCDate(date.getUTCDate() - 1);
-    let y = date.getUTCFullYear();
-    let m = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    let d = date.getUTCDate().toString().padStart(2, '0');
-    return `${y}-${m}-${d}`;
+    return `${date.getUTCFullYear()}-${(date.getUTCMonth()+1).toString().padStart(2,'0')}-${date.getUTCDate().toString().padStart(2,'0')}`;
   }
-  let queryDate = subtractOneDay(selectedDate);
-  let list = cachedData.filter(item => item.visit_date === queryDate);
-  if (list.length === 0) { alert(`沒有 ${selectedDate} 的車輛紀錄`); return; }
+  
+  await loadFreshData();
+  let list = cachedData.filter(item => item.visit_date === subtractOneDay(selectedDate));
+  
+  if (list.length === 0) { 
+    alert(`沒有 ${selectedDate} 的車輛紀錄`); 
+    return; 
+  }
   if (!confirm(`確認匯出 ${selectedDate} 的 ${list.length} 筆紀錄？`)) return;
+  
   let loadingDiv = document.createElement('div');
   loadingDiv.innerText = '正在產生 PDF，請稍候...';
   loadingDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);color:#fff;padding:15px 30px;border-radius:10px;z-index:9999';
   document.body.appendChild(loadingDiv);
   await new Promise(r => setTimeout(r, 100));
+  
   try {
     const { jsPDF } = window.jspdf;
     const ROWS_PER_PAGE = 10;
     const totalPages = Math.ceil(list.length / ROWS_PER_PAGE);
     const pdf = new jsPDF('l', 'mm', 'a4');
+    
     for (let page = 0; page < totalPages; page++) {
       const start = page * ROWS_PER_PAGE;
       const end = Math.min(start + ROWS_PER_PAGE, list.length);
