@@ -21,12 +21,92 @@
     .btn-tab .chi-text, .btn-tab .eng-text { color: inherit; }
     .btn-tab.active .chi-text, .btn-tab.active .eng-text,
     .btn-tab.staff .chi-text, .btn-tab.staff .eng-text { color: #ffffff; }
-    /* 訪客頁面英文大一倍（except input box） */
-    .visitor-eng-text { font-size: 0.9rem; color: #718096; display: block; }
-    .form-group .eng-text { font-size: 0.7rem; color: #718096; display: block; }
-    .form-group .visitor-eng-text { font-size: 0.7rem; }
-    .alert-cutoff .eng-text, .alert-reminder .eng-text { font-size: 0.9rem; }
-    .btn-tab .eng-text { font-size: 0.9rem; }
+    
+    /* ========== 訪客頁面英文放大一倍（except input box） ========== */
+    /* 頁面標題英文 */
+    .text-center[style*="color:#718096"] { font-size: 1.5rem !important; }
+    
+    /* 警告區塊內的英文 */
+    .alert-cutoff .eng-text, 
+    .alert-reminder .eng-text { 
+      font-size: 1.8rem !important; 
+      line-height: 1.3;
+    }
+    
+    /* 表單標籤旁的英文 (form-sub) */
+    .form-group .form-sub,
+    .form-group .eng-text { 
+      font-size: 1.4rem !important; 
+      display: block;
+    }
+    
+    /* 按鈕內的英文 */
+    .btn-gold .eng-text,
+    .btn-success .eng-text,
+    .btn-outline .eng-text,
+    .btn-secondary .eng-text { 
+      font-size: 1.4rem !important; 
+    }
+    
+    /* 預覽區塊內的英文 */
+    .preview-label, .preview-value,
+    .preview-box .eng-text { 
+      font-size: 1.4rem !important; 
+    }
+    
+    /* 成功區塊內的英文 */
+    .ref-box p, .ref-box span,
+    .success-eng-text { 
+      font-size: 1.4rem !important; 
+    }
+    
+    /* 注意事項標題內的英文 */
+    .alert-reminder div.eng-text,
+    .alert-cutoff div.eng-text { 
+      font-size: 1.8rem !important; 
+    }
+    
+    /* 按鈕內部原有的 eng-text 樣式覆蓋 */
+    .btn-gold .eng-text, 
+    .btn-success .eng-text, 
+    .btn-outline .eng-text, 
+    .btn-secondary .eng-text {
+      font-size: 1.4rem !important;
+    }
+    
+    /* 輸入框內部的英文維持原大小 - 不放大 */
+    input, select, textarea, 
+    .form-control, .form-select,
+    input::placeholder, select::placeholder,
+    input[type="tel"], input[type="date"],
+    .plate-input, .plate-input-search {
+      font-size: 1rem !important;
+    }
+    
+    /* 按鈕內部主要中文維持原大小，英文放大 */
+    .btn-gold .chi-text { font-size: 1.2rem; }
+    .btn-gold .eng-text { font-size: 1.4rem !important; }
+    
+    /* 訪客頁面其他英文 */
+    .section-title .eng-text,
+    .icon-text .eng-text {
+      font-size: 1.4rem !important;
+    }
+    
+    .form-label .eng-text {
+      font-size: 1.4rem !important;
+    }
+    
+    /* 職員頁面英文維持原樣，不受影響 */
+    #staffPanel .eng-text {
+      font-size: 0.7rem !important;
+    }
+    #staffPanel .btn-success .eng-text,
+    #staffPanel .btn-outline .eng-text {
+      font-size: 0.9rem !important;
+    }
+    /* ========== 結束訪客頁面英文放大 ========== */
+    
     .form-group { margin-bottom: 20px; }
     .form-label { display: block; font-weight: 600; font-size: 0.9rem; color: #2d3748; }
     .form-sub { font-size: 0.7rem; color: #718096; display: block; }
@@ -57,7 +137,6 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 950px; }
     th, td { padding: 8px 6px; text-align: center; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
     th { background: #f1f5f9; font-weight: 600; }
-    /* 讓 # 號碼對齊 */
     td:first-child, th:first-child { text-align: center; }
     .section-title { color: #2c7a7b; font-weight: bold; margin: 16px 0 12px; padding-left: 8px; border-left: 4px solid #319795; font-size: 1rem; }
     .section-title .eng-text { font-size: 0.7rem; font-weight: normal; }
@@ -122,24 +201,24 @@
       <div class="preview-row"><span class="preview-label">📅 日期/Date :</span><span id="pDate" class="preview-value"></span></div>
       <div class="preview-row"><span class="preview-label">⏱️ 時間/Time :</span><span id="pTime" class="preview-value"></span></div>
     </div>
-    <div class="flex"><button class="btn-secondary w-100" onclick="backToForm()">← 返回修改/Back</button><button class="btn-success w-100" onclick="submitFinal()">✓ 確認提交/Confirm</button></div>
+    <div class="flex"><button class="btn-secondary w-100" onclick="backToForm()"><span class="chi-text">← 返回修改</span><span class="eng-text">Back</span></button><button class="btn-success w-100" onclick="submitFinal()"><span class="chi-text">✓ 確認提交</span><span class="eng-text">Confirm</span></button></div>
   </div>
   <div id="successSection" class="card hidden">
-    <div class="ref-box"><h3 style="color:#38a169;">🎉 登記申請已送出</h3><div style="background:#fff;border-radius:12px;padding:16px;margin:16px 0"><span style="color:#718096;">📄 參考編號</span><h2 id="refNumber" style="color:#2c7a7b;">----</h2></div><p>📸 請截圖保存此畫面</p></div>
-    <button class="btn-outline w-100 mt-2" onclick="resetForm()">➕ 填寫新申請</button>
+    <div class="ref-box"><h3 style="color:#38a169;">🎉 登記申請已送出</h3><div style="background:#fff;border-radius:12px;padding:16px;margin:16px 0"><span style="color:#718096;">📄 參考編號</span><h2 id="refNumber" style="color:#2c7a7b;">----</h2></div><p>📸 請截圖保存此畫面 <span class="eng-text" style="display:inline;">Please screenshot this page</span></p></div>
+    <button class="btn-outline w-100 mt-2" onclick="resetForm()"><span class="chi-text">➕ 填寫新申請</span><span class="eng-text">New Application</span></button>
   </div>
 </div>
 
 <!-- 職員面板 -->
 <div id="staffPanel" style="display:none;">
-  <div id="loginBox" class="card text-center"><h3>🔒 職員驗證 <span class="eng-text">Staff Verification</span></h3><input type="password" id="staffPwd" class="form-control mb-2" placeholder=" 密碼 / Password"><button class="btn-success w-100" onclick="verifyLogin()">🔓 登入/Login</button><div id="loginError" class="hidden" style="color:#e53e3e;margin-top:12px;">❌ 密碼錯誤 / Wrong Password</div></div>
+  <div id="loginBox" class="card text-center"><h3>🔒 職員驗證 <span class="eng-text">Staff Verification</span></h3><input type="password" id="staffPwd" class="form-control mb-2" placeholder="🔑 密碼 / Password"><button class="btn-success w-100" onclick="verifyLogin()"><span class="chi-text">🔓 登入</span><span class="eng-text">Login</span></button><div id="loginError" class="hidden" style="color:#e53e3e;margin-top:12px;">❌ 密碼錯誤 / Wrong Password</div></div>
   <div id="adminPanel" class="card hidden">
     <div class="flex" style="justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
       <h4 class="icon-text">🚗 閘口核對系統 <span class="eng-text">Gate Check System</span></h4>
       <div class="flex">
         <input type="date" id="exportDate" class="form-control" style="width:140px">
-        <button class="btn-success" onclick="exportPDF()">📄 匯出PDF / Export PDF</button>
-        <button class="btn-outline" onclick="logout()">🚪 登出 / Logout</button>
+        <button class="btn-success" onclick="exportPDF()"><span class="chi-text">📄 匯出PDF</span><span class="eng-text">Export PDF</span></button>
+        <button class="btn-outline" onclick="logout()"><span class="chi-text">🚪 登出</span><span class="eng-text">Logout</span></button>
       </div>
     </div>
     
@@ -498,7 +577,7 @@ function resetForm() {
   initDatePicker();
 }
 
-// ==================== PDF 匯出 (已修改：無紀錄時只顯示簡潔提示) ====================
+// ==================== PDF 匯出 (無紀錄時只顯示簡潔提示) ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
@@ -519,7 +598,7 @@ async function exportPDF() {
   let queryDate = subtractOneDay(selectedDate);
   let list = cachedData.filter(item => item.visit_date === queryDate);
   
-  // ✅ 修改處：無紀錄時只顯示「沒有 YYYY-MM-DD 的車輛紀錄」，不顯示現有日期清單
+  // 無紀錄時只顯示簡潔提示
   if (list.length === 0) {
     alert(`沒有 ${selectedDate} 的車輛紀錄`);
     return;
