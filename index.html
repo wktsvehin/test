@@ -137,7 +137,7 @@
     
     <div class="section-title icon-text">✅ 今日已確認名單 <span class="eng-text">Today's Confirmed List</span></div>
     <div class="table-responsive">
-      </table>
+      <tr>
         <thead>
           <tr>
             <th>#</th>
@@ -168,7 +168,6 @@ let pendingSubmissionData = null;
 
 // ==================== 輔助函數 ====================
 
-// 今日日期減 1 日
 function getTodayString() {
   let now = new Date();
   let correctedDate = new Date(now);
@@ -183,7 +182,6 @@ function getCurrentHour() {
   return new Date().getHours();
 }
 
-// 直接提取日期
 function extractDateOnly(dateStr) {
   if (!dateStr) return '';
   let str = String(dateStr).trim();
@@ -195,7 +193,6 @@ function extractDateOnly(dateStr) {
   return str;
 }
 
-// 時間處理：減 23 分鐘，向下取整到 15 分鐘
 function formatTimeOnly(timeStr) {
   if (!timeStr) return '---';
   let str = String(timeStr);
@@ -226,7 +223,6 @@ function formatTimeOnly(timeStr) {
   return `${newHour.toString().padStart(2, '0')}:${roundedMinute.toString().padStart(2, '0')}`;
 }
 
-// ==================== 初始化 ====================
 function initDatePicker() {
   let p = document.getElementById('visitDatePicker');
   if (!p) return;
@@ -296,7 +292,7 @@ function logout() {
 
 function loadData() {
   const confirmTable = document.getElementById('confirmedTable');
-  if (confirmTable) confirmTable.innerHTML = '</table><td colspan="10">⏳ 載入中...<\/td><\/tr>';
+  if (confirmTable) confirmTable.innerHTML = '<tr><td colspan="10">⏳ 載入中...<\/td><\/tr>';
   
   fetch(API)
     .then(r => r.json())
@@ -341,7 +337,7 @@ function renderTables() {
   if (!confirmBody) return;
   
   if (confirmed.length === 0) {
-    confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+    confirmBody.innerHTML = '<td><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
       <tr>
@@ -486,7 +482,7 @@ function resetForm() {
   initDatePicker();
 }
 
-// ==================== PDF 匯出 (車輛種類欄位加闊) ====================
+// ==================== PDF 匯出 ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { alert('請先選擇要匯出的日期'); return; }
@@ -559,27 +555,27 @@ async function exportPDF() {
             <div style="font-size:14px;">China Harbour Engineering Company Limited</div>
             <div style="font-size:12px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
           </div>
-          <div>
-            <div style="font-size:14px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div>
-          </div>
+        </div>
+        <div style="text-align:right;margin-bottom:15px;">
+          <div style="font-size:14px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div>
         </div>
         <div style="text-align:center;margin:15px 0;">
           <div style="font-size:22px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:8px 25px;border-radius:35px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
         </div>
-        <div style="font-size:18px;font-weight:bold;text-align:center;margin-bottom:10px;">車輛進入預先登記記錄</div>
-        <div style="font-size:14px;text-align:center;margin-bottom:15px;color:#555;">Registered Vehicle Log</div>
+        <div style="font-size:18px;font-weight:bold;text-align:center;margin-bottom:8px;">車輛進入預先登記記錄</div>
+        <div style="font-size:18px;text-align:center;margin-bottom:15px;color:#555;">Registered Vehicle Log</div>
         ${pageInfo}
         <table style="width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed;">
           <colgroup>
             <col style="width:5%">
-            <col style="width:10%">
+            <col style="width:12%">
             <col style="width:12%">
             <col style="width:9%">
             <col style="width:18%">
             <col style="width:9%">
             <col style="width:8%">
             <col style="width:8%">
-            <col style="width:21%">
+            <col style="width:19%">
           </colgroup>
           <thead>
             <tr style="background:#f0f0f0;">
@@ -595,7 +591,7 @@ async function exportPDF() {
             </tr>
           </thead>
           <tbody>${tableRows}</tbody>
-        <table>
+        </table>
         <div style="margin-top:15px;font-size:12px;text-align:center;">系統產生之記錄，請核對無誤後簽署</div>
         <div style="font-size:10px;text-align:center;">System generated record, please verify before signing</div>
       `;
