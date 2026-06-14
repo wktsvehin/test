@@ -115,7 +115,23 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .plate-input-search { padding-left: 12px !important; }
     .icon-text { display: inline-flex; align-items: center; gap: 6px; }
-    @media (max-width:480px) { body { padding: 12px; max-width: 100%; } .card { padding: 16px; } .preview-row { flex-direction: column; } .preview-label, .preview-value { width: 100%; } th, td { padding: 4px 2px; font-size: 0.6rem; white-space: normal; } table { min-width: 750px; } }
+    
+    /* 首頁英文副標題放大50%：從 0.75rem → 1.125rem */
+    .subtitle-eng {
+      font-size: 1.125rem !important;
+      color: #718096;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width:480px) { 
+      body { padding: 12px; max-width: 100%; } 
+      .card { padding: 16px; } 
+      .preview-row { flex-direction: column; } 
+      .preview-label, .preview-value { width: 100%; } 
+      th, td { padding: 4px 2px; font-size: 0.6rem; white-space: normal; } 
+      table { min-width: 750px; }
+      .subtitle-eng { font-size: 1rem !important; }
+    }
   </style>
 </head>
 <body>
@@ -124,7 +140,7 @@
   <img src="epd.png" alt="EPD" class="epd-logo-img" onerror="this.style.display='none';">
 </div>
 <h2 class="text-center" style="color:#2c7a7b;">西九龍廢物轉運站<br>車輛登記</h2>
-<p class="text-center" style="color:#718096;font-size:0.75rem;margin-bottom:20px;">West Kowloon Transfer Station Vehicle Registration</p>
+<p class="text-center subtitle-eng">West Kowloon Transfer Station Vehicle Registration</p>
 
 <div class="flex" style="margin-bottom:20px;">
   <div id="btnVisitor" class="btn-tab active" onclick="switchTab('visitor')"><span class="chi-text">訪客登記</span><span class="eng-text" style="font-size:0.9rem;">Visitor Registration</span></div>
@@ -402,7 +418,7 @@ function renderTables() {
   } else {
     confirmBody.innerHTML = confirmed.map((i, idx) => `
       <tr>
-        <td>${idx+1}</td>
+        <td>${idx+1}<\/td>
         <td>${escapeHtml(i.ref_no)}<\/td>
         <td>${escapeHtml(i.company)}<\/td>
         <td style="color:#2c7a7b;font-weight:bold;">${escapeHtml(i.vehicle_no)}<\/td>
@@ -412,7 +428,7 @@ function renderTables() {
         <td>${escapeHtml(i.visit_date)}<\/td>
         <td>${escapeHtml(i.visit_time)}<\/td>
         <td>${escapeHtml(i.purpose)}<\/td>
-      </tr>
+      <\/tr>
     `).join('');
   }
 }
