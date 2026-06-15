@@ -353,17 +353,16 @@ function getCurrentHour() {
   return new Date().getHours();
 }
 
+// ✅ 修復：直接使用今天的日期，不減一天
 function getTodayString() {
   let now = new Date();
-  let correctedDate = new Date(now);
-  correctedDate.setDate(now.getDate() - 1);
-  let year = correctedDate.getFullYear();
-  let month = (correctedDate.getMonth() + 1).toString().padStart(2, '0');
-  let day = correctedDate.getDate().toString().padStart(2, '0');
+  let year = now.getFullYear();
+  let month = (now.getMonth() + 1).toString().padStart(2, '0');
+  let day = now.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
-// 將日期統一轉換為 YYYY-MM-DD 格式
+// 將日期統一轉換為 YYYY-MM-DD 格式（只處理格式，不轉換日期值）
 function normalizeDate(dateStr) {
   if (!dateStr) return '';
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
@@ -373,24 +372,20 @@ function normalizeDate(dateStr) {
   return dateStr;
 }
 
+// ✅ 修復：直接返回原始時間，不做任何減法運算
 function formatTimeOnly(timeStr) {
   if (!timeStr) return '---';
-  let str = String(timeStr);
-  if (str === '---') return '---';
-  let hour = 0, minute = 0;
-  let match = str.match(/T(\d{2}):(\d{2})/);
-  if (match) { hour = parseInt(match[1]); minute = parseInt(match[2]); }
-  else {
-    let timeMatch = str.match(/(\d{2}):(\d{2})/);
-    if (timeMatch) { hour = parseInt(timeMatch[1]); minute = parseInt(timeMatch[2]); }
-    else return '---';
+  // 如果已經是純時間格式 HH:MM
+  if (/^\d{2}:\d{2}$/.test(timeStr)) return timeStr;
+  // 如果是 UTC 時間格式，提取時間部分
+  if (timeStr.includes('T')) {
+    let match = timeStr.match(/(\d{2}):(\d{2})/);
+    if (match) return `${match[1]}:${match[2]}`;
   }
-  let totalMinutes = hour * 60 + minute - 23;
-  if (totalMinutes < 0) totalMinutes += 24 * 60;
-  let newHour = Math.floor(totalMinutes / 60);
-  let newMinute = totalMinutes % 60;
-  let roundedMinute = Math.floor(newMinute / 15) * 15;
-  return `${newHour.toString().padStart(2, '0')}:${roundedMinute.toString().padStart(2, '0')}`;
+  // 其他情況嘗試提取時間
+  let match = timeStr.match(/(\d{2}):(\d{2})/);
+  if (match) return `${match[1]}:${match[2]}`;
+  return timeStr;
 }
 
 function initTimeSelects() {
@@ -475,6 +470,7 @@ async function loadFreshData() {
         let vehicleNo = item.vehicle_no || item.車牌 || '';
         let visitDateRaw = item.visit_date || item.到訪日期 || item.date || '';
         let visitDate = normalizeDate(visitDateRaw);
+        let rawTime = item.time_in || item.入站時間 || '';
         
         return {
           ref_no: item.ref_no || item.參考編號 || '',
@@ -483,7 +479,7 @@ async function loadFreshData() {
           vehicle_type: item.vehicle_type || item.車型 || '',
           contact_person: item.contact_person || item.聯絡人 || '',
           tel_no: item.tel_no || item.電話 || '',
-          visit_time: item.time_in || item.入站時間 || '',
+          visit_time: formatTimeOnly(rawTime),
           purpose: item.purpose || item.目的 || '',
           visit_date: visitDate
         };
@@ -499,7 +495,7 @@ async function loadFreshData() {
   }
 }
 
-// 檢查重複日期（同時比對車牌 + 日期）- 檢查所有選取日期
+// 檢查重複日期（同時比對車牌 + 日期）
 async function checkDuplicateDates(vehicleNo, dates) {
   await loadFreshData();
   
@@ -565,12 +561,13 @@ function loadData() {
   const confirmTable = document.getElementById('confirmedTable');
   if (confirmTable) confirmTable.innerHTML = '<tr><td colspan="10">⏳ 載入中...<\/td><\/tr>';
   fetch(API).then(r => r.json()).then(data => {
-    if (!Array.isArray(data)) { confirmTable.innerHTML = '<tr><td colspan="10">❌ 資料格式錯誤<\/td><\/tr>'; return; }
+    if (!Array.isArray(data)) { confirmTable.innerHTML = '<td><td colspan="10">❌ 資料格式錯誤<\/td><\/tr>'; return; }
     if (data.length === 0) { confirmTable.innerHTML = '<tr><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>'; return; }
     cachedData = data.map(item => {
       let vehicleNo = item.vehicle_no || item.車牌 || '';
       let visitDateRaw = item.visit_date || item.到訪日期 || item.date || '';
       let visitDate = normalizeDate(visitDateRaw);
+      let rawTime = item.time_in || item.入站時間 || '';
       return {
         ref_no: item.ref_no || item.參考編號 || '',
         company: item.company || item.公司 || '',
@@ -578,7 +575,7 @@ function loadData() {
         vehicle_type: item.vehicle_type || item.車型 || '',
         contact_person: item.contact_person || item.聯絡人 || '',
         tel_no: item.tel_no || item.電話 || '',
-        visit_time: item.time_in || item.入站時間 || '',
+        visit_time: formatTimeOnly(rawTime),
         purpose: item.purpose || item.目的 || '',
         visit_date: visitDate
       };
@@ -730,19 +727,16 @@ async function submitFinal() {
   isSubmitting = true;
   showLoading(true, '檢查重複登記...');
   
-  // 檢查所有選取日期是否有重複
   const conflictDates = await checkDuplicateDates(pendingSubmissionData.vehicleNo, pendingSubmissionData.dates);
   
   showLoading(false);
   
-  // 只要有任一日期衝突，整批不提交
   if (conflictDates.length > 0) {
     alert(`⚠️ 以下日期已有 ${pendingSubmissionData.vehicleNo} 的登記，無法重複預約：\n${conflictDates.join(', ')}\n\n請按「返回修改」重新選擇日期。`);
     isSubmitting = false;
-    return;  // 停留在預覽頁面，不產生 ref no，不寫入 Sheets
+    return;
   }
   
-  // 無任何衝突，繼續提交
   showLoading(true, '正在提交資料到伺服器...');
   
   const results = [];
@@ -798,7 +792,6 @@ async function exportPDF() {
     return; 
   }
   
-  // 直接使用使用者選擇的日期，不做減一天轉換
   await loadFreshData();
   let list = cachedData.filter(item => item.visit_date === selectedDate);
   
