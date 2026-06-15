@@ -362,17 +362,7 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-// 將日期統一轉換為 YYYY-MM-DD 格式
-function normalizeDate(dateStr) {
-  if (!dateStr) return '';
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-  if (dateStr.includes('T')) return dateStr.split('T')[0];
-  let match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})/);
-  if (match) return `${match[1]}-${match[2]}-${match[3]}`;
-  return dateStr;
-}
-
-// ✅ 最終修復版：直接返回原始時間，不做任何處理
+// 時間顯示（直接返回原始值，因為 Google Sheets 已是純文字格式）
 function formatTimeOnly(timeStr) {
   if (!timeStr || timeStr === '---' || timeStr === '未選') return '---';
   return timeStr;
@@ -448,7 +438,7 @@ function updateSelectedHint() {
   }
 }
 
-// 從 Google Sheets 載入資料
+// 從 Google Sheets 載入資料（純文字格式，無需轉換）
 async function loadFreshData() {
   try {
     console.log("🔄 載入 Google Sheets 資料...");
@@ -458,8 +448,7 @@ async function loadFreshData() {
     if (Array.isArray(data)) {
       cachedData = data.map(item => {
         let vehicleNo = item.vehicle_no || item.車牌 || '';
-        let visitDateRaw = item.visit_date || item.到訪日期 || item.date || '';
-        let visitDate = normalizeDate(visitDateRaw);
+        let visitDate = item.visit_date || item.到訪日期 || item.date || '';
         let rawTime = item.time_in || item.入站時間 || '';
         
         return {
@@ -471,7 +460,7 @@ async function loadFreshData() {
           tel_no: item.tel_no || item.電話 || '',
           visit_time: formatTimeOnly(rawTime),
           purpose: item.purpose || item.目的 || '',
-          visit_date: visitDate
+          visit_date: visitDate  // 純文字日期，無需轉換
         };
       });
       
@@ -485,27 +474,24 @@ async function loadFreshData() {
   }
 }
 
-// 檢查重複日期
+// 檢查重複日期（直接比對純文字字串）
 async function checkDuplicateDates(vehicleNo, dates) {
   await loadFreshData();
-  
-  const normalizedRequestDates = dates.map(d => normalizeDate(d));
   
   const existingDateSet = new Set();
   cachedData.forEach(item => {
     if (item.vehicle_no.toUpperCase() === vehicleNo.toUpperCase()) {
-      const normalizedDate = normalizeDate(item.visit_date);
-      if (normalizedDate) {
-        existingDateSet.add(normalizedDate);
+      if (item.visit_date) {
+        existingDateSet.add(item.visit_date);
       }
     }
   });
   
   console.log(`🔍 檢查車牌 ${vehicleNo}`);
-  console.log(`📅 申請日期: ${normalizedRequestDates.join(', ')}`);
+  console.log(`📅 申請日期: ${dates.join(', ')}`);
   console.log(`📋 已存在日期: ${[...existingDateSet].join(', ')}`);
   
-  const conflictingDates = normalizedRequestDates.filter(date => existingDateSet.has(date));
+  const conflictingDates = dates.filter(date => existingDateSet.has(date));
   
   console.log(`⚠️ 衝突日期: ${conflictingDates.join(', ')}`);
   return conflictingDates;
@@ -555,8 +541,7 @@ function loadData() {
     if (data.length === 0) { confirmTable.innerHTML = '<tr><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>'; return; }
     cachedData = data.map(item => {
       let vehicleNo = item.vehicle_no || item.車牌 || '';
-      let visitDateRaw = item.visit_date || item.到訪日期 || item.date || '';
-      let visitDate = normalizeDate(visitDateRaw);
+      let visitDate = item.visit_date || item.到訪日期 || item.date || '';
       let rawTime = item.time_in || item.入站時間 || '';
       return {
         ref_no: item.ref_no || item.參考編號 || '',
@@ -774,7 +759,7 @@ function resetForm() {
   document.getElementById('minute').value = '';
 }
 
-// ==================== PDF 匯出（直接比對，不轉換日期） ====================
+// ==================== PDF 匯出 ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { 
