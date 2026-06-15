@@ -24,8 +24,6 @@
     
     .alert-cutoff .eng-text, 
     .alert-reminder .eng-text { font-size: inherit !important; line-height: 1.3; }
-    .form-group .form-sub,
-    .form-group .eng-text { font-size: inherit !important; display: inline-block; margin-left: 8px; }
     .btn-gold .eng-text,
     .btn-success .eng-text,
     .btn-outline .eng-text,
@@ -62,7 +60,7 @@
       font-size: 0.9rem !important; 
     }
     
-    /* 成功頁面表格樣式 - 放入容器內 */
+    /* 成功頁面表格樣式 */
     .ref-box {
       background: #f0fff4;
       border: 2px dashed #38a169;
@@ -99,36 +97,46 @@
       margin-top: 4px;
     }
     
-    /* 表單標籤中英文對齊 */
+    /* ========== 表單標籤樣式（方式三） ========== */
+    .form-group {
+      margin-bottom: 20px;
+    }
     .form-label {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: block;
+      margin-bottom: 8px;
     }
     .form-label .chi-text {
+      display: block;
       font-weight: 600;
       font-size: 0.9rem;
       color: #2d3748;
+      margin-bottom: 2px;
     }
     .form-label .eng-text {
-      font-size: 0.9rem;
+      display: block;
+      font-size: 0.7rem;
       color: #718096;
-      font-weight: normal;
+      margin-left: 4px;
     }
-    
-    /* 時間選填提示樣式 - 與 ETA 相同大小 */
-    .optional-badge {
+    .form-label .optional-text {
+      display: block;
       font-size: 0.7rem;
       color: #38a169;
-      margin-left: 8px;
-      font-weight: normal;
+      margin-left: 4px;
     }
+    /* ========== 結束 ========== */
     
-    /* 預約截數提示圖標 */
-    .cutoff-icon {
-      font-size: 1.1rem;
-      margin-right: 6px;
+    /* 時間選項容器 */
+    .time-select-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .time-select-group .form-select {
+      flex: 1;
+    }
+    .time-colon {
+      font-size: 1.5rem;
     }
     
     .date-checkbox-group {
@@ -171,49 +179,36 @@
       text-align: left;
     }
     
-    /* 手機版垂直列表 */
-    @media (max-width: 480px) {
-      .success-table thead { display: none; }
-      .success-table, .success-table tbody, .success-table tr, .success-table td {
-        display: block;
-        width: 100%;
-      }
-      .success-table tr {
-        margin-bottom: 10px;
-        border: 1px solid #cbd5e0;
-        border-radius: 12px;
-        padding: 8px;
-        background: white;
-      }
-      .success-table td {
-        border: none;
-        padding: 6px 4px;
-        display: flex;
-        justify-content: space-between;
-      }
-      .success-table td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: #2c7a7b;
-        margin-right: 10px;
-      }
-      .date-checkbox-group { gap: 8px; }
-      .date-checkbox-item { padding: 6px 12px; }
-      .date-text { font-size: 0.8rem; }
-      .ref-box { padding: 16px 12px; }
+    /* 提交按鈕英文黑色 */
+    .btn-gold .eng-text {
+      color: #000000 !important;
     }
     
-    .form-group { margin-bottom: 20px; }
-    .form-control, .form-select { width: 100%; padding: 12px 14px; font-size: 1rem; border: 1px solid #cbd5e0; border-radius: 12px; background: #ffffff; color: #1a202c; }
+    .cutoff-icon {
+      font-size: 1.1rem;
+      margin-right: 6px;
+    }
+    
+    .form-control, .form-select {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #1a202c;
+    }
     .form-control::placeholder, .form-select::placeholder { color: #a0aec0; }
     input[type="tel"]::placeholder, input[type="date"]::placeholder { color: #a0aec0; }
     .form-control:focus, .form-select:focus { outline: none; border-color: #2c7a7b; }
     input[type="tel"], input[type="date"] { width: 100%; padding: 12px 14px; font-size: 1rem; border: 1px solid #cbd5e0; border-radius: 12px; background: #ffffff; color: #1a202c; font-family: inherit; }
     input[type="tel"]:focus, input[type="date"]:focus { outline: none; border-color: #2c7a7b; }
+    
     .btn-gold { width: 100%; background: linear-gradient(135deg,#ffb020,#f59e0b); border: none; color: #1e293b; font-weight: 800; font-size: 1.2rem; padding: 14px; border-radius: 16px; cursor: pointer; }
     .btn-success { background: #38a169; border: none; color: #fff; padding: 12px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; }
     .btn-outline { background: transparent; border: 2px solid #cbd5e0; padding: 12px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; }
     .btn-secondary { background: #e2e8f0; border: none; padding: 12px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; }
+    
     .hidden { display: none !important; }
     .alert-cutoff { background: #fff5f5; border-left: 4px solid #e53e3e; padding: 12px; border-radius: 10px; margin-bottom: 20px; }
     .alert-reminder { background: #fefce8; border-left: 4px solid #eab308; padding: 12px; border-radius: 10px; margin-bottom: 20px; }
@@ -257,7 +252,8 @@
       th, td { padding: 4px 2px; font-size: 0.6rem; white-space: normal; } 
       table { min-width: 750px; }
       .subtitle-eng { font-size: 1rem !important; }
-      .form-label { flex-direction: column; gap: 4px; }
+      .time-select-group { flex-direction: column; }
+      .time-colon { display: none; }
     }
   </style>
 </head>
@@ -283,7 +279,9 @@
       <div class="eng-text">Cut-off: 3:00 PM daily | Before > Next day | After > Day after next |</div>
     </div>
     <div class="alert-reminder"><div style="font-weight:bold;">📋 注意事項：</div><div>請提供準確資料，資料只作入站核對之用</div><div class="eng-text">Please provide accurate information. It will only be used in verification.</div></div>
+    
     <form id="regForm" onsubmit="showPreview(event)">
+      <!-- 公司名 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">🏢 公司名</span>
@@ -291,6 +289,8 @@
         </label>
         <input type="text" class="form-control" id="company" placeholder="e.g. China Harbour Engineering" required>
       </div>
+      
+      <!-- 車牌號碼 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">🚗 車牌號碼</span>
@@ -298,6 +298,8 @@
         </label>
         <input type="text" class="form-control plate-input" id="vehicleNo" placeholder="AB1234" required>
       </div>
+      
+      <!-- 聯絡人 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">👤 聯絡人</span>
@@ -305,6 +307,8 @@
         </label>
         <input type="text" class="form-control" id="contactPerson" placeholder="Chan Tai Man" required>
       </div>
+      
+      <!-- 電話號碼 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">📞 電話號碼</span>
@@ -312,6 +316,8 @@
         </label>
         <input type="tel" class="form-control" id="telNo" placeholder="9xxxxxxx" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required>
       </div>
+      
+      <!-- 進入目的/工作内容 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">📦 進入目的/工作内容</span>
@@ -319,6 +325,8 @@
         </label>
         <input type="text" class="form-control" id="purpose" placeholder="送貨 / Goods Delivery" required>
       </div>
+      
+      <!-- 車輛種類 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">🚙 車輛種類</span>
@@ -335,6 +343,7 @@
         </select>
       </div>
       
+      <!-- 預計到訪日期 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">📅 預計到訪日期（可選多日，上限七天）</span>
@@ -344,24 +353,28 @@
         <div id="selectedDatesHint" class="selected-dates-hint"></div>
       </div>
       
+      <!-- 預計到訪時間 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">⏱️ 預計到訪時間</span>
           <span class="eng-text">ETA (24h)</span>
-          <span class="optional-badge">(選填 / Optional)</span>
+          <span class="optional-text">(選填 / Optional)</span>
         </label>
-        <div class="flex">
-          <select id="hour" class="form-select" style="flex:1">
+        <div class="time-select-group">
+          <select id="hour" class="form-select">
             <option value="">時</option>
           </select>
-          <span style="font-size:1.5rem;">:</span>
-          <select id="minute" class="form-select" style="flex:1">
+          <span class="time-colon">:</span>
+          <select id="minute" class="form-select">
             <option value="">分</option>
           </select>
         </div>
       </div>
       
-      <button type="submit" class="btn-gold mt-2"><span class="chi-text">📮 提交申請</span><span class="eng-text">Application Submission</span></button>
+      <button type="submit" class="btn-gold mt-2">
+        <span class="chi-text">📮 提交申請</span>
+        <span class="eng-text">Application Submission</span>
+      </button>
     </form>
   </div>
   
@@ -658,7 +671,7 @@ function renderTables() {
   let confirmed = cachedData.filter(item => item.visit_date === todayStr);
   const confirmBody = document.getElementById('confirmedTable');
   if (!confirmBody) return;
-  if (confirmed.length === 0) confirmBody.innerHTML = '</tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+  if (confirmed.length === 0) confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   else confirmBody.innerHTML = confirmed.map((i, idx) => `<tr><td>${idx+1}<\/td><td>${escapeHtml(i.ref_no)}<\/td><td>${escapeHtml(i.company)}<\/td><td style="color:#2c7a7b;font-weight:bold;">${escapeHtml(i.vehicle_no)}<\/td><td>${escapeHtml(i.vehicle_type)}<\/td><td>${escapeHtml(i.contact_person)}<\/td><td>${escapeHtml(i.tel_no)}<\/td><td>${escapeHtml(i.visit_date)}<\/td><td>${escapeHtml(i.visit_time)}<\/td><td>${escapeHtml(i.purpose)}<\/td><\/tr>`).join('');
 }
 
