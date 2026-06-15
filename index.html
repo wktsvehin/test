@@ -25,7 +25,7 @@
     .alert-cutoff .eng-text, 
     .alert-reminder .eng-text { font-size: inherit !important; line-height: 1.3; }
     .form-group .form-sub,
-    .form-group .eng-text { font-size: inherit !important; display: block; }
+    .form-group .eng-text { font-size: inherit !important; display: inline-block; margin-left: 8px; }
     .btn-gold .eng-text,
     .btn-success .eng-text,
     .btn-outline .eng-text,
@@ -41,13 +41,95 @@
     #staffPanel .btn-success .eng-text,
     #staffPanel .btn-outline .eng-text { font-size: 0.9rem !important; }
     
+    /* 預覽頁面按鈕樣式 */
     .preview-section-buttons .btn-secondary .chi-text,
     .preview-section-buttons .btn-secondary .eng-text,
     .preview-section-buttons .btn-success .chi-text,
-    .preview-section-buttons .btn-success .eng-text { font-size: 0.9rem !important; }
-    .preview-section-buttons .btn-success .eng-text { color: #ffffff !important; }
+    .preview-section-buttons .btn-success .eng-text { 
+      font-size: 0.9rem !important; 
+    }
+    .preview-section-buttons .btn-secondary .chi-text,
+    .preview-section-buttons .btn-secondary .eng-text { 
+      color: #000000 !important; 
+    }
+    .preview-section-buttons .btn-success .eng-text { 
+      color: #ffffff !important; 
+    }
+    
+    /* 新申請按鈕字體大小 */
     .new-app-btn .chi-text,
-    .new-app-btn .eng-text { font-size: 0.9rem !important; }
+    .new-app-btn .eng-text { 
+      font-size: 0.9rem !important; 
+    }
+    
+    /* 成功頁面表格樣式 - 放入容器內 */
+    .ref-box {
+      background: #f0fff4;
+      border: 2px dashed #38a169;
+      border-radius: 20px;
+      padding: 16px 12px;
+      text-align: center;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .success-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.75rem;
+      table-layout: fixed;
+    }
+    .success-table th,
+    .success-table td {
+      border: 1px solid #cbd5e0;
+      padding: 6px 4px;
+      text-align: left;
+      word-break: break-word;
+      font-size: 0.75rem;
+    }
+    .success-table th {
+      background: #e6f7f7;
+      font-weight: 600;
+      width: 50%;
+    }
+    
+    /* 提醒文字 - 英文與中文相同大小 */
+    .reminder-box .eng-text {
+      font-size: inherit !important;
+      margin-top: 4px;
+    }
+    
+    /* 表單標籤中英文對齊 */
+    .form-label {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .form-label .chi-text {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #2d3748;
+    }
+    .form-label .eng-text {
+      font-size: 0.9rem;
+      color: #718096;
+      font-weight: normal;
+    }
+    
+    /* 時間選填提示樣式 - 與 ETA 相同大小 */
+    .optional-badge {
+      font-size: 0.7rem;
+      color: #38a169;
+      margin-left: 8px;
+      font-weight: normal;
+    }
+    
+    /* 預約截數提示圖標 */
+    .cutoff-icon {
+      font-size: 1.1rem;
+      margin-right: 6px;
+    }
     
     .date-checkbox-group {
       display: flex;
@@ -80,34 +162,6 @@
     .date-text { font-size: 0.9rem; font-weight: 500; }
     .selected-dates-hint { margin-top: 8px; font-size: 0.75rem; color: #2c7a7b; }
     
-    .ref-box {
-      background: #f0fff4;
-      border: 2px dashed #38a169;
-      border-radius: 20px;
-      padding: 20px 16px;
-      text-align: center;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-    }
-    .success-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0;
-      font-size: 0.8rem;
-      table-layout: fixed;
-    }
-    .success-table th,
-    .success-table td {
-      border: 1px solid #cbd5e0;
-      padding: 8px 6px;
-      text-align: left;
-      word-break: break-word;
-    }
-    .success-table th {
-      background: #e6f7f7;
-      font-weight: 600;
-      width: 50%;
-    }
     .reminder-box {
       background: #fefce8;
       border-left: 4px solid #eab308;
@@ -117,6 +171,7 @@
       text-align: left;
     }
     
+    /* 手機版垂直列表 */
     @media (max-width: 480px) {
       .success-table thead { display: none; }
       .success-table, .success-table tbody, .success-table tr, .success-table td {
@@ -149,8 +204,6 @@
     }
     
     .form-group { margin-bottom: 20px; }
-    .form-label { display: block; font-weight: 600; font-size: 0.9rem; color: #2d3748; }
-    .form-sub { font-size: 0.7rem; color: #718096; display: block; }
     .form-control, .form-select { width: 100%; padding: 12px 14px; font-size: 1rem; border: 1px solid #cbd5e0; border-radius: 12px; background: #ffffff; color: #1a202c; }
     .form-control::placeholder, .form-select::placeholder { color: #a0aec0; }
     input[type="tel"]::placeholder, input[type="date"]::placeholder { color: #a0aec0; }
@@ -181,8 +234,8 @@
     .section-title { color: #2c7a7b; font-weight: bold; margin: 16px 0 12px; padding-left: 8px; border-left: 4px solid #319795; font-size: 1rem; }
     .section-title .eng-text { font-size: 0.7rem; font-weight: normal; }
     .plate-input { text-transform: uppercase; font-weight: bold; }
-    .chi-text { display: block; }
-    .eng-text { display: block; font-size: 0.7rem; color: #718096; }
+    .chi-text { display: inline-block; }
+    .eng-text { display: inline-block; font-size: 0.7rem; color: #718096; }
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 10000; }
     .loading-spinner { background: white; padding: 20px 30px; border-radius: 16px; text-align: center; }
     .loading-spinner .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #2c7a7b; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
@@ -196,13 +249,6 @@
       margin-bottom: 20px;
     }
     
-    .optional-badge {
-      font-size: 0.7rem;
-      color: #38a169;
-      margin-left: 8px;
-      font-weight: normal;
-    }
-    
     @media (max-width:480px) { 
       body { padding: 12px; max-width: 100%; } 
       .card { padding: 16px; } 
@@ -211,6 +257,7 @@
       th, td { padding: 4px 2px; font-size: 0.6rem; white-space: normal; } 
       table { min-width: 750px; }
       .subtitle-eng { font-size: 1rem !important; }
+      .form-label { flex-direction: column; gap: 4px; }
     }
   </style>
 </head>
@@ -231,27 +278,78 @@
 <div id="visitorPanel">
   <div id="formSection" class="card">
     <div class="alert-cutoff">
-      <div style="font-weight:bold;">預約截數提示：</div>
+      <div style="font-weight:bold;"><span class="cutoff-icon">⏰</span> 預約截數提示：</div>
       <div>每天下午3:00截數</div>
       <div class="eng-text">Cut-off: 3:00 PM daily | Before > Next day | After > Day after next |</div>
     </div>
     <div class="alert-reminder"><div style="font-weight:bold;">📋 注意事項：</div><div>請提供準確資料，資料只作入站核對之用</div><div class="eng-text">Please provide accurate information. It will only be used in verification.</div></div>
     <form id="regForm" onsubmit="showPreview(event)">
-      <div class="form-group"><label class="form-label">🏢 公司名 <span class="form-sub">Company Name</span></label><input type="text" class="form-control" id="company" placeholder="e.g. China Harbour Engineering" required></div>
-      <div class="form-group"><label class="form-label">🚗 車牌號碼 <span class="form-sub">Vehicle No.</span></label><input type="text" class="form-control plate-input" id="vehicleNo" placeholder="AB1234" required></div>
-      <div class="form-group"><label class="form-label">👤 聯絡人 <span class="form-sub">Contact Person</span></label><input type="text" class="form-control" id="contactPerson" placeholder="Chan Tai Man" required></div>
-      <div class="form-group"><label class="form-label">📞 電話號碼 <span class="form-sub">Tel. No.</span></label><input type="tel" class="form-control" id="telNo" placeholder="9xxxxxxx" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required></div>
-      <div class="form-group"><label class="form-label">📦 進入目的/工作内容 <span class="form-sub">Purpose/Work Description</span></label><input type="text" class="form-control" id="purpose" placeholder="送貨 / Goods Delivery" required></div>
-      <div class="form-group"><label class="form-label">🚙 車輛種類 <span class="form-sub">Vehicle Type</span></label><select class="form-select" id="vehicleType" required><option value="">請選擇/Select</option><option>私家車/Private Car</option><option>客貨車/Van</option><option>中型貨車/Medium Truck</option><option>重型貨車/Heavy Truck</option><option>工程車/Engineering Vehicle</option><option>其他/Other</option></select></div>
+      <div class="form-group">
+        <label class="form-label">
+          <span class="chi-text">🏢 公司名</span>
+          <span class="eng-text">Company Name</span>
+        </label>
+        <input type="text" class="form-control" id="company" placeholder="e.g. China Harbour Engineering" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <span class="chi-text">🚗 車牌號碼</span>
+          <span class="eng-text">Vehicle No.</span>
+        </label>
+        <input type="text" class="form-control plate-input" id="vehicleNo" placeholder="AB1234" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <span class="chi-text">👤 聯絡人</span>
+          <span class="eng-text">Contact Person</span>
+        </label>
+        <input type="text" class="form-control" id="contactPerson" placeholder="Chan Tai Man" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <span class="chi-text">📞 電話號碼</span>
+          <span class="eng-text">Tel. No.</span>
+        </label>
+        <input type="tel" class="form-control" id="telNo" placeholder="9xxxxxxx" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <span class="chi-text">📦 進入目的/工作内容</span>
+          <span class="eng-text">Purpose/Work Description</span>
+        </label>
+        <input type="text" class="form-control" id="purpose" placeholder="送貨 / Goods Delivery" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          <span class="chi-text">🚙 車輛種類</span>
+          <span class="eng-text">Vehicle Type</span>
+        </label>
+        <select class="form-select" id="vehicleType" required>
+          <option value="">請選擇/Select</option>
+          <option>私家車/Private Car</option>
+          <option>客貨車/Van</option>
+          <option>中型貨車/Medium Truck</option>
+          <option>重型貨車/Heavy Truck</option>
+          <option>工程車/Engineering Vehicle</option>
+          <option>其他/Other</option>
+        </select>
+      </div>
       
       <div class="form-group">
-        <label class="form-label">📅 預計到訪日期（可選多日）<span class="form-sub">Visit Date (Multiple days, max 7 days)</span></label>
+        <label class="form-label">
+          <span class="chi-text">📅 預計到訪日期（可選多日，上限七天）</span>
+          <span class="eng-text">Visit Date (Multiple days, max 7 days)</span>
+        </label>
         <div id="dateCheckboxGroup" class="date-checkbox-group"></div>
         <div id="selectedDatesHint" class="selected-dates-hint"></div>
       </div>
       
       <div class="form-group">
-        <label class="form-label">⏱️ 預計到訪時間 <span class="form-sub">ETA (24h)</span> <span class="optional-badge">(選填 / Optional)</span></label>
+        <label class="form-label">
+          <span class="chi-text">⏱️ 預計到訪時間</span>
+          <span class="eng-text">ETA (24h)</span>
+          <span class="optional-badge">(選填 / Optional)</span>
+        </label>
         <div class="flex">
           <select id="hour" class="form-select" style="flex:1">
             <option value="">時</option>
@@ -302,7 +400,7 @@
       <div class="reminder-box">
         <div><strong>📌 注意：/ Note</strong></div>
         <div>登記成功，已登記資料不可修改。</div>
-        <div class="eng-text" style="margin-top:4px;">Application completed. No amendment is allowed in this registration.</div>
+        <div class="eng-text">Application completed. No amendment is allowed in this registration.</div>
       </div>
       <p>📸 請截圖保存此畫面 / Please screenshot this page</p>
     </div>
@@ -353,7 +451,6 @@ function getCurrentHour() {
   return new Date().getHours();
 }
 
-// 直接使用今天的日期
 function getTodayString() {
   let now = new Date();
   let year = now.getFullYear();
@@ -362,7 +459,6 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-// 時間顯示（直接返回原始值，因為 Google Sheets 已是純文字格式）
 function formatTimeOnly(timeStr) {
   if (!timeStr || timeStr === '---' || timeStr === '未選') return '---';
   return timeStr;
@@ -438,7 +534,6 @@ function updateSelectedHint() {
   }
 }
 
-// 從 Google Sheets 載入資料（純文字格式，無需轉換）
 async function loadFreshData() {
   try {
     console.log("🔄 載入 Google Sheets 資料...");
@@ -460,7 +555,7 @@ async function loadFreshData() {
           tel_no: item.tel_no || item.電話 || '',
           visit_time: formatTimeOnly(rawTime),
           purpose: item.purpose || item.目的 || '',
-          visit_date: visitDate  // 純文字日期，無需轉換
+          visit_date: visitDate
         };
       });
       
@@ -474,7 +569,6 @@ async function loadFreshData() {
   }
 }
 
-// 檢查重複日期（直接比對純文字字串）
 async function checkDuplicateDates(vehicleNo, dates) {
   await loadFreshData();
   
@@ -556,7 +650,7 @@ function loadData() {
       };
     }).filter(item => item.vehicle_no && item.visit_date);
     renderTables();
-  }).catch(error => { confirmTable.innerHTML = `<tr><td colspan="10">❌ 連線失敗: ${error.message}<\/td><\/tr>`; });
+  }).catch(error => { confirmTable.innerHTML = `</td><td colspan="10">❌ 連線失敗: ${error.message}<\/td><\/tr>`; });
 }
 
 function renderTables() {
@@ -564,7 +658,7 @@ function renderTables() {
   let confirmed = cachedData.filter(item => item.visit_date === todayStr);
   const confirmBody = document.getElementById('confirmedTable');
   if (!confirmBody) return;
-  if (confirmed.length === 0) confirmBody.innerHTML = '<tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
+  if (confirmed.length === 0) confirmBody.innerHTML = '</tr><td colspan="10">📭 今日暫無已確認車輛<\/td><\/tr>';
   else confirmBody.innerHTML = confirmed.map((i, idx) => `<tr><td>${idx+1}<\/td><td>${escapeHtml(i.ref_no)}<\/td><td>${escapeHtml(i.company)}<\/td><td style="color:#2c7a7b;font-weight:bold;">${escapeHtml(i.vehicle_no)}<\/td><td>${escapeHtml(i.vehicle_type)}<\/td><td>${escapeHtml(i.contact_person)}<\/td><td>${escapeHtml(i.tel_no)}<\/td><td>${escapeHtml(i.visit_date)}<\/td><td>${escapeHtml(i.visit_time)}<\/td><td>${escapeHtml(i.purpose)}<\/td><\/tr>`).join('');
 }
 
@@ -594,7 +688,6 @@ function showLoading(show, message) {
   } else if (existing) existing.remove();
 }
 
-// 提交單一日期到 Google Sheets
 async function submitToGoogleSheet(formData, refNo, date) {
   return new Promise((resolve) => {
     const params = new URLSearchParams();
@@ -633,8 +726,6 @@ function generateRefNo() {
   for (let i = 0; i < 4; i++) randomStr += chars[Math.floor(Math.random() * chars.length)];
   return `${year}${month}${day}-${randomStr}`;
 }
-
-// ==================== 主要流程 ====================
 
 async function showPreview(e) {
   e.preventDefault();
@@ -759,7 +850,6 @@ function resetForm() {
   document.getElementById('minute').value = '';
 }
 
-// ==================== PDF 匯出 ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { 
