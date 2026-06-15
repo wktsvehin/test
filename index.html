@@ -363,13 +363,14 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-function extractDateOnly(dateStr) {
+// 將日期統一轉換為 YYYY-MM-DD 格式
+function normalizeDate(dateStr) {
   if (!dateStr) return '';
-  let str = String(dateStr).trim();
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
-  let match = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+  if (dateStr.includes('T')) return dateStr.split('T')[0];
+  let match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})/);
   if (match) return `${match[1]}-${match[2]}-${match[3]}`;
-  return str;
+  return dateStr;
 }
 
 function formatTimeOnly(timeStr) {
@@ -471,14 +472,9 @@ async function loadFreshData() {
     
     if (Array.isArray(data)) {
       cachedData = data.map(item => {
-        // 直接使用 item.vehicle_no 和 item.visit_date (從 Console 看到的欄位名稱)
         let vehicleNo = item.vehicle_no || item.車牌 || '';
-        let visitDate = item.visit_date || item.到訪日期 || item.date || '';
-        
-        // 如果日期包含時間，只取日期部分
-        if (visitDate && visitDate.includes('T')) {
-          visitDate = visitDate.split('T')[0];
-        }
+        let visitDateRaw = item.visit_date || item.到訪日期 || item.date || '';
+        let visitDate = normalizeDate(visitDateRaw);
         
         return {
           ref_no: item.ref_no || item.參考編號 || '',
@@ -493,13 +489,8 @@ async function loadFreshData() {
         };
       });
       
-      // 過濾掉沒有車牌或沒有日期的無效資料
       cachedData = cachedData.filter(item => item.vehicle_no && item.visit_date);
-      
       console.log(`✅ 載入 ${cachedData.length} 筆有效資料`);
-      // 印出 AA9394 的記錄方便除錯
-      const aa9394Records = cachedData.filter(item => item.vehicle_no === 'AA9394');
-      console.log(`🔍 AA9394 的記錄:`, aa9394Records);
     }
     return cachedData;
   } catch (error) {
@@ -508,23 +499,29 @@ async function loadFreshData() {
   }
 }
 
-// 檢查重複日期（同時比對車牌 + 日期）
+// 檢查重複日期（同時比對車牌 + 日期）- 檢查所有選取日期
 async function checkDuplicateDates(vehicleNo, dates) {
   await loadFreshData();
   
-  const conflictingDates = [];
-  for (const date of dates) {
-    const exists = cachedData.some(item => 
-      item.vehicle_no.toUpperCase() === vehicleNo.toUpperCase() && 
-      item.visit_date === date
-    );
-    if (exists) {
-      conflictingDates.push(date);
-      console.log(`⚠️ 衝突: ${vehicleNo} 已在 ${date} 有登記`);
-    }
-  }
+  const normalizedRequestDates = dates.map(d => normalizeDate(d));
   
-  console.log(`📊 檢查結果: 車牌=${vehicleNo}, 申請日期=[${dates.join(', ')}], 衝突日期=[${conflictingDates.join(', ')}]`);
+  const existingDateSet = new Set();
+  cachedData.forEach(item => {
+    if (item.vehicle_no.toUpperCase() === vehicleNo.toUpperCase()) {
+      const normalizedDate = normalizeDate(item.visit_date);
+      if (normalizedDate) {
+        existingDateSet.add(normalizedDate);
+      }
+    }
+  });
+  
+  console.log(`🔍 檢查車牌 ${vehicleNo}`);
+  console.log(`📅 申請日期: ${normalizedRequestDates.join(', ')}`);
+  console.log(`📋 已存在日期: ${[...existingDateSet].join(', ')}`);
+  
+  const conflictingDates = normalizedRequestDates.filter(date => existingDateSet.has(date));
+  
+  console.log(`⚠️ 衝突日期: ${conflictingDates.join(', ')}`);
   return conflictingDates;
 }
 
@@ -572,8 +569,8 @@ function loadData() {
     if (data.length === 0) { confirmTable.innerHTML = '<tr><td colspan="10">📭 暫無任何登記記錄<\/td><\/tr>'; return; }
     cachedData = data.map(item => {
       let vehicleNo = item.vehicle_no || item.車牌 || '';
-      let visitDate = item.visit_date || item.到訪日期 || item.date || '';
-      if (visitDate && visitDate.includes('T')) visitDate = visitDate.split('T')[0];
+      let visitDateRaw = item.visit_date || item.到訪日期 || item.date || '';
+      let visitDate = normalizeDate(visitDateRaw);
       return {
         ref_no: item.ref_no || item.參考編號 || '',
         company: item.company || item.公司 || '',
@@ -733,17 +730,19 @@ async function submitFinal() {
   isSubmitting = true;
   showLoading(true, '檢查重複登記...');
   
-  // 檢查重複日期
+  // 檢查所有選取日期是否有重複
   const conflictDates = await checkDuplicateDates(pendingSubmissionData.vehicleNo, pendingSubmissionData.dates);
   
   showLoading(false);
   
+  // 只要有任一日期衝突，整批不提交
   if (conflictDates.length > 0) {
     alert(`⚠️ 以下日期已有 ${pendingSubmissionData.vehicleNo} 的登記，無法重複預約：\n${conflictDates.join(', ')}\n\n請按「返回修改」重新選擇日期。`);
     isSubmitting = false;
-    return;
+    return;  // 停留在預覽頁面，不產生 ref no，不寫入 Sheets
   }
   
+  // 無任何衝突，繼續提交
   showLoading(true, '正在提交資料到伺服器...');
   
   const results = [];
@@ -836,7 +835,7 @@ async function exportPDF() {
       const pdfContainer = document.createElement('div');
       pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:15px';
       let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:11px;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
-      pdfContainer.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #ccc;padding-bottom:8px;"><div><div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div><div style="font-size:12px;">China Harbour Engineering Company Limited</div><div style="font-size:11px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div></div><div style="text-align:right;"><div style="font-size:12px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div></div></div><div style="text-align:center;margin:12px 0;"><div style="font-size:20px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div></div><div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:8px;">車輛進入預先登記記錄</div><div style="font-size:14px;text-align:center;margin-bottom:12px;">Registered Vehicle Log</div>${pageInfo}<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Item</th><th>Ref No.</th><th>Company</th><th>Vehicle No.</th><th>Vehicle Type</th><th>Contact</th><th>Tel</th><th>Time In</th><th>Purpose</th></tr></thead><tbody>${tableRows}</tbody></td><div style="margin-top:12px;font-size:12px;text-align:center;">系統產生之記錄，請查閱後簽署</div><div style="font-size:10px;text-align:center;">System generated record, please sign after checking</div>`;
+      pdfContainer.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #ccc;padding-bottom:8px;"><div><div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div><div style="font-size:12px;">China Harbour Engineering Company Limited</div><div style="font-size:11px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div></div><div style="text-align:right;"><div style="font-size:12px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div></div></div><div style="text-align:center;margin:12px 0;"><div style="font-size:20px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div></div><div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:8px;">車輛進入預先登記記錄</div><div style="font-size:14px;text-align:center;margin-bottom:12px;">Registered Vehicle Log</div>${pageInfo}<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Item</th><th>Ref No.</th><th>Company</th><th>Vehicle No.</th><th>Vehicle Type</th><th>Contact</th><th>Tel</th><th>Time In</th><th>Purpose</th></tr></thead><tbody>${tableRows}</tbody></table><div style="margin-top:12px;font-size:12px;text-align:center;">系統產生之記錄，請查閱後簽署</div><div style="font-size:10px;text-align:center;">System generated record, please sign after checking</div>`;
       document.body.appendChild(pdfContainer);
       await new Promise(r => setTimeout(r, 200));
       const canvas = await html2canvas(pdfContainer, { scale: 2.5, backgroundColor: '#ffffff' });
