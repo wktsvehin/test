@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
   <meta charset="UTF-8">
@@ -353,7 +353,7 @@ function getCurrentHour() {
   return new Date().getHours();
 }
 
-// 直接使用今天的日期，不減一天
+// 直接使用今天的日期
 function getTodayString() {
   let now = new Date();
   let year = now.getFullYear();
@@ -362,7 +362,7 @@ function getTodayString() {
   return `${year}-${month}-${day}`;
 }
 
-// 將日期統一轉換為 YYYY-MM-DD 格式（只處理格式，不轉換日期值）
+// 將日期統一轉換為 YYYY-MM-DD 格式
 function normalizeDate(dateStr) {
   if (!dateStr) return '';
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
@@ -372,23 +372,9 @@ function normalizeDate(dateStr) {
   return dateStr;
 }
 
-// ✅ 修復：直接返回原始時間，不做任何加減運算
+// ✅ 最終修復版：直接返回原始時間，不做任何處理
 function formatTimeOnly(timeStr) {
-  if (!timeStr) return '---';
-  
-  // 如果已經是純時間格式 HH:MM
-  if (/^\d{2}:\d{2}$/.test(timeStr)) return timeStr;
-  
-  // 如果是 UTC 時間格式 (如 2026-06-15T09:00:00.000Z)
-  if (timeStr.includes('T')) {
-    let match = timeStr.match(/(\d{2}):(\d{2})/);
-    if (match) return `${match[1]}:${match[2]}`;
-  }
-  
-  // 其他情況嘗試提取時間
-  let match = timeStr.match(/(\d{2}):(\d{2})/);
-  if (match) return `${match[1]}:${match[2]}`;
-  
+  if (!timeStr || timeStr === '---' || timeStr === '未選') return '---';
   return timeStr;
 }
 
@@ -499,7 +485,7 @@ async function loadFreshData() {
   }
 }
 
-// 檢查重複日期（同時比對車牌 + 日期）
+// 檢查重複日期
 async function checkDuplicateDates(vehicleNo, dates) {
   await loadFreshData();
   
@@ -585,7 +571,7 @@ function loadData() {
       };
     }).filter(item => item.vehicle_no && item.visit_date);
     renderTables();
-  }).catch(error => { confirmTable.innerHTML = `</tr><td colspan="10">❌ 連線失敗: ${error.message}<\/td><\/tr>`; });
+  }).catch(error => { confirmTable.innerHTML = `<tr><td colspan="10">❌ 連線失敗: ${error.message}<\/td><\/tr>`; });
 }
 
 function renderTables() {
