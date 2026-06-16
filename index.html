@@ -22,7 +22,6 @@
     .btn-tab.active .chi-text, .btn-tab.active .eng-text,
     .btn-tab.staff .chi-text, .btn-tab.staff .eng-text { color: #ffffff; }
     
-    /* 按鈕標籤：中英文上下分行 */
     .btn-tab .chi-text {
       display: block;
       font-size: 1rem;
@@ -36,7 +35,6 @@
       margin-top: 2px;
     }
     
-    /* 登入按鈕：中英文上下分行，字體與職員專用相同 */
     .login-btn .chi-text {
       display: block;
       font-size: 1rem;
@@ -50,7 +48,6 @@
       margin-top: 2px;
     }
     
-    /* 提交申請按鈕：中英文上下分行 */
     .submit-btn .chi-text {
       display: block;
       font-size: 1.2rem;
@@ -64,7 +61,6 @@
       margin-top: 2px;
     }
     
-    /* 職員驗證標題：中英文視覺相同大小 */
     .staff-verify-title .chi-text {
       display: inline;
       font-size: 1.2rem;
@@ -79,7 +75,7 @@
       margin-left: 8px;
     }
     
-    /* 閘口核對系統標題：中英文上下分行，視覺相同大小 */
+    /* 閘口核對系統標題：英文視覺相同大小 */
     .gate-title .chi-text {
       display: block;
       font-size: 1rem;
@@ -88,12 +84,12 @@
     }
     .gate-title .eng-text {
       display: block;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #2c7a7b;
     }
     
-    /* 職員面板按鈕：中英文上下分行 */
+    /* 職員面板按鈕：中英文視覺相同大小 */
     .staff-btn .chi-text {
       display: block;
       font-size: 0.9rem;
@@ -101,7 +97,7 @@
     }
     .staff-btn .eng-text {
       display: block;
-      font-size: 0.75rem;
+      font-size: 1.1rem;
       font-weight: 400;
       color: #ffffff;
       margin-top: 2px;
@@ -113,13 +109,13 @@
     }
     .staff-btn-outline .eng-text {
       display: block;
-      font-size: 0.75rem;
+      font-size: 1.1rem;
       font-weight: 400;
       color: inherit;
       margin-top: 2px;
     }
     
-    /* 今日已確認名單標題：中英文上下分行 */
+    /* 今日已確認名單標題：英文視覺相同大小 */
     .section-title .chi-text {
       display: block;
       font-size: 1rem;
@@ -128,7 +124,7 @@
     }
     .section-title .eng-text {
       display: block;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #2c7a7b;
     }
@@ -150,7 +146,6 @@
     #staffPanel .btn-success .eng-text,
     #staffPanel .btn-outline .eng-text { font-size: 0.9rem !important; }
     
-    /* 預覽頁面按鈕樣式 */
     .preview-section-buttons .btn-secondary .chi-text,
     .preview-section-buttons .btn-secondary .eng-text,
     .preview-section-buttons .btn-success .chi-text,
@@ -165,13 +160,11 @@
       color: #ffffff !important; 
     }
     
-    /* 新申請按鈕字體大小 */
     .new-app-btn .chi-text,
     .new-app-btn .eng-text { 
       font-size: 0.9rem !important; 
     }
     
-    /* 成功頁面表格樣式 */
     .ref-box {
       background: #f0fff4;
       border: 2px dashed #38a169;
@@ -202,13 +195,11 @@
       width: 50%;
     }
     
-    /* 提醒文字 - 英文與中文相同大小 */
     .reminder-box .eng-text {
       font-size: inherit !important;
       margin-top: 4px;
     }
     
-    /* ========== 表單標籤樣式（英文與中文相同大小） ========== */
     .form-group {
       margin-bottom: 20px;
     }
@@ -235,9 +226,7 @@
       color: #38a169;
       margin-left: 4px;
     }
-    /* ========== 結束 ========== */
     
-    /* 時間選項容器 */
     .time-select-group {
       display: flex;
       gap: 12px;
@@ -304,7 +293,6 @@
       text-align: left;
     }
     
-    /* 提交按鈕英文黑色 */
     .btn-gold .eng-text {
       color: #000000 !important;
     }
@@ -347,7 +335,6 @@
     .mt-2 { margin-top: 16px; }
     .w-100 { width: 100%; }
     
-    /* ========== 職員表格字體放大 ========== */
     .table-responsive {
       overflow-x: auto;
       background: #fff;
@@ -380,7 +367,6 @@
     .table-responsive th:first-child {
       text-align: center;
     }
-    /* ========== 結束 ========== */
     
     .section-title { color: #2c7a7b; font-weight: bold; margin: 16px 0 12px; padding-left: 8px; border-left: 4px solid #319795; font-size: 1rem; }
     .section-title .eng-text { font-size: 0.7rem; font-weight: normal; }
@@ -449,7 +435,6 @@
     <div class="alert-reminder"><div style="font-weight:bold;">📋 注意事項：</div><div>請提供準確資料，資料只作入站核對之用</div><div class="eng-text">Please provide accurate information. It will only be used in verification.</div></div>
     
     <form id="regForm" onsubmit="showPreview(event)">
-      <!-- 公司名 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">🏢 公司名</span>
@@ -458,7 +443,6 @@
         <input type="text" class="form-control" id="company" placeholder="e.g. China Harbour Engineering" required>
       </div>
       
-      <!-- 車牌號碼 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">🚗 車牌號碼</span>
@@ -467,7 +451,6 @@
         <input type="text" class="form-control plate-input" id="vehicleNo" placeholder="AB1234" required>
       </div>
       
-      <!-- 聯絡人 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">👤 聯絡人</span>
@@ -476,7 +459,6 @@
         <input type="text" class="form-control" id="contactPerson" placeholder="Chan Tai Man" required>
       </div>
       
-      <!-- 電話號碼 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">📞 電話號碼</span>
@@ -485,7 +467,6 @@
         <input type="tel" class="form-control" id="telNo" placeholder="9xxxxxxx" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required>
       </div>
       
-      <!-- 進入目的/工作内容 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">📦 進入目的/工作内容</span>
@@ -494,7 +475,6 @@
         <input type="text" class="form-control" id="purpose" placeholder="送貨 / Goods Delivery" required>
       </div>
       
-      <!-- 車輛種類 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">🚙 車輛種類</span>
@@ -511,7 +491,6 @@
         </select>
       </div>
       
-      <!-- 預計到訪日期 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">📅 預計到訪日期（可選多日，上限七天，每個車牌號碼僅限每天預約一次）</span>
@@ -521,7 +500,6 @@
         <div id="selectedDatesHint" class="selected-dates-hint"></div>
       </div>
       
-      <!-- 預計到訪時間 -->
       <div class="form-group">
         <label class="form-label">
           <span class="chi-text">⏱️ 預計到訪時間</span>
