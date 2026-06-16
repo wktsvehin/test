@@ -64,7 +64,7 @@
       margin-top: 2px;
     }
     
-    /* 職員驗證標題：中英文相同字體大小 */
+    /* 職員驗證標題：中英文視覺相同大小 */
     .staff-verify-title .chi-text {
       display: inline;
       font-size: 1.2rem;
@@ -73,10 +73,64 @@
     }
     .staff-verify-title .eng-text {
       display: inline;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: #2d3748;
       margin-left: 8px;
+    }
+    
+    /* 閘口核對系統標題：中英文上下分行，視覺相同大小 */
+    .gate-title .chi-text {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2c7a7b;
+    }
+    .gate-title .eng-text {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2c7a7b;
+    }
+    
+    /* 職員面板按鈕：中英文上下分行 */
+    .staff-btn .chi-text {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .staff-btn .eng-text {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+    .staff-btn-outline .chi-text {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .staff-btn-outline .eng-text {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: inherit;
+      margin-top: 2px;
+    }
+    
+    /* 今日已確認名單標題：中英文上下分行 */
+    .section-title .chi-text {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2c7a7b;
+    }
+    .section-title .eng-text {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2c7a7b;
     }
     
     .alert-cutoff .eng-text, 
@@ -503,7 +557,7 @@
       <span class="chi-text">🔒 職員驗證</span>
       <span class="eng-text">Staff Verification</span>
     </h3>
-    <input type="password" id="staffPwd" class="form-control mb-2" placeholder="🔑 密碼 / Password">
+    <input type="password" id="staffPwd" class="form-control mb-2" placeholder="密碼 / Password">
     <button class="btn-success w-100 login-btn" onclick="verifyLogin()">
       <span class="chi-text">🔓 登入</span>
       <span class="eng-text">Login</span>
@@ -512,17 +566,29 @@
   </div>
   <div id="adminPanel" class="card hidden">
     <div class="flex" style="justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
-      <h4 class="icon-text">🚗 閘口核對系統 <span class="eng-text">Gate Check System</span></h4>
+      <h4 class="gate-title">
+        <span class="chi-text">🚗 閘口核對系統</span>
+        <span class="eng-text">Gate Check System</span>
+      </h4>
       <div class="flex">
         <input type="date" id="exportDate" class="form-control" style="width:140px">
-        <button class="btn-success" onclick="exportPDF()"><span class="chi-text">📄 匯出PDF</span><span class="eng-text">Export PDF</span></button>
-        <button class="btn-outline" onclick="logout()"><span class="chi-text">🚪 登出</span><span class="eng-text">Logout</span></button>
+        <button class="btn-success staff-btn" onclick="exportPDF()">
+          <span class="chi-text">📄 匯出PDF</span>
+          <span class="eng-text">Export PDF</span>
+        </button>
+        <button class="btn-outline staff-btn-outline" onclick="logout()">
+          <span class="chi-text">🚪 登出</span>
+          <span class="eng-text">Logout</span>
+        </button>
       </div>
     </div>
     <div class="search-wrapper">
       <input type="text" id="searchInput" class="form-control plate-input-search mb-3" placeholder="搜尋今天入站車牌 / Search Today's Vehicle No." oninput="filterTable()">
     </div>
-    <div class="section-title icon-text">✅ 今日已確認名單 <span class="eng-text">Today's Confirmed List</span></div>
+    <div class="section-title">
+      <span class="chi-text">✅ 今日已確認名單</span>
+      <span class="eng-text">Today's Confirmed List</span>
+    </div>
     <div class="table-responsive">
       <table>
         <thead>
