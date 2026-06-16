@@ -244,6 +244,13 @@
       margin-bottom: 20px;
     }
     
+    /* 提示文字字體大小 */
+    .selected-dates-hint {
+      font-size: 0.9rem !important;
+      color: #e53e3e;
+      margin-top: 8px;
+    }
+    
     @media (max-width:480px) { 
       body { padding: 12px; max-width: 100%; } 
       .card { padding: 16px; } 
@@ -346,8 +353,8 @@
       <!-- 預計到訪日期 -->
       <div class="form-group">
         <label class="form-label">
-          <span class="chi-text">📅 預計到訪日期（可選多日，上限七天）</span>
-          <span class="eng-text">Visit Date (Multiple days, max 7 days)</span>
+          <span class="chi-text">📅 預計到訪日期（可選多日，上限七天，每個車牌號碼僅限每天預約一次）</span>
+          <span class="eng-text">Visit Date (Multiple days, max 7 days, Each vehicle no. is limited to one reservation per day.)</span>
         </label>
         <div id="dateCheckboxGroup" class="date-checkbox-group"></div>
         <div id="selectedDatesHint" class="selected-dates-hint"></div>
@@ -903,7 +910,7 @@ async function exportPDF() {
       const pdfContainer = document.createElement('div');
       pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:15px';
       let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:11px;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
-      pdfContainer.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #ccc;padding-bottom:8px;"><div><div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div><div style="font-size:12px;">China Harbour Engineering Company Limited</div><div style="font-size:11px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div></div><div style="text-align:right;"><div style="font-size:12px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div></div></div><div style="text-align:center;margin:12px 0;"><div style="font-size:20px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div></div><div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:8px;">車輛進入預先登記記錄</div><div style="font-size:14px;text-align:center;margin-bottom:12px;">Registered Vehicle Log</div>${pageInfo}<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Item</th><th>Ref No.</th><th>Company</th><th>Vehicle No.</th><th>Vehicle Type</th><th>Contact</th><th>Tel</th><th>Time In</th><th>Purpose</th></tr></thead><tbody>${tableRows}</tbody><tr><div style="margin-top:12px;font-size:12px;text-align:center;">系統產生之記錄，請查閱後簽署</div><div style="font-size:10px;text-align:center;">System generated record, please sign after checking</div>`;
+      pdfContainer.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #ccc;padding-bottom:8px;"><div><div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div><div style="font-size:12px;">China Harbour Engineering Company Limited</div><div style="font-size:11px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div></div><div style="text-align:right;"><div style="font-size:12px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div></div></div><div style="text-align:center;margin:12px 0;"><div style="font-size:20px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div></div><div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:8px;">車輛進入預先登記記錄</div><div style="font-size:14px;text-align:center;margin-bottom:12px;">Registered Vehicle Log</div>${pageInfo}<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Item</th><th>Ref No.</th><th>Company</th><th>Vehicle No.</th><th>Vehicle Type</th><th>Contact</th><th>Tel</th><th>Time In</th><th>Purpose</th></tr></thead><tbody>${tableRows}</tbody></table><div style="margin-top:12px;font-size:12px;text-align:center;">系統產生之記錄，請查閱後簽署</div><div style="font-size:10px;text-align:center;">System generated record, please sign after checking</div>`;
       document.body.appendChild(pdfContainer);
       await new Promise(r => setTimeout(r, 200));
       const canvas = await html2canvas(pdfContainer, { scale: 2.5, backgroundColor: '#ffffff' });
