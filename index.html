@@ -835,6 +835,7 @@ function showLoading(show, message) {
   } else if (existing) existing.remove();
 }
 
+// ✅ 修改：加入單引號強制純文字
 async function submitToGoogleSheet(formData, refNo, date) {
   return new Promise((resolve) => {
     const params = new URLSearchParams();
@@ -846,9 +847,7 @@ async function submitToGoogleSheet(formData, refNo, date) {
     params.append('time_in', formData.visitTime);
     params.append('purpose', formData.purpose);
     params.append('vehicle_type', formData.vehicleType);
-    
-    // ✅ 修改：加入單引號，強制 Google Sheets 將日期視為純文字
-    params.append('visit_date', "'" + date);
+    params.append('visit_date', "'" + date);  // ✅ 加入單引號
     
     const url = `${API}?${params.toString()}`;
     console.log("提交到:", url);
@@ -991,6 +990,7 @@ function resetForm() {
   document.getElementById('timeSelect').value = '';
 }
 
+// ==================== PDF 匯出（含中英對照 + 欄位調整） ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { 
@@ -1024,24 +1024,94 @@ async function exportPDF() {
       const end = Math.min(start + ROWS_PER_PAGE, list.length);
       const pageData = list.slice(start, end);
       let tableRows = '';
+      
+      // 欄位寬度（Ref No. 和 Vehicle Type 變窄，Purpose 變寬）
+      const colWidths = {
+        item: '5%',
+        ref_no: '10%',
+        company: '12%',
+        vehicle_no: '10%',
+        vehicle_type: '12%',
+        contact: '8%',
+        tel: '8%',
+        time_in: '8%',
+        purpose: '27%'
+      };
+      
       pageData.forEach((item, idx) => {
         const globalIndex = start + idx + 1;
-        tableRows += `<tr><td style="border:1px solid #000;padding:10px 4px;">${globalIndex}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.ref_no)}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.company)}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.vehicle_no)}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.vehicle_type)}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.contact_person)}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.tel_no)}<\/td><td style="border:1px solid #000;padding:10px 4px;">${item.visit_time}<\/td><td style="border:1px solid #000;padding:10px 4px;">${escapeHtml(item.purpose)}<\/td><\/tr>`;
+        tableRows += `<tr style="background:#ffffff;">
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.item};">${globalIndex}<span style="display:block;font-size:10px;color:#666;">項目</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}<span style="display:block;font-size:10px;color:#666;">參考編號</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.company};">${escapeHtml(item.company)}<span style="display:block;font-size:10px;color:#666;">公司</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}<span style="display:block;font-size:10px;color:#666;font-weight:normal;">車牌</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.vehicle_type};">${escapeHtml(item.vehicle_type)}<span style="display:block;font-size:10px;color:#666;">車輛種類</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}<span style="display:block;font-size:10px;color:#666;">聯絡人</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}<span style="display:block;font-size:10px;color:#666;">電話</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.time_in};">${item.visit_time}<span style="display:block;font-size:10px;color:#666;">入站時間</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}<span style="display:block;font-size:10px;color:#666;">目的</span></td>
+        <\/tr>`;
       });
+      
       const pdfContainer = document.createElement('div');
-      pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:15px';
-      let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:11px;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
-      pdfContainer.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #ccc;padding-bottom:8px;"><div><div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div><div style="font-size:12px;">China Harbour Engineering Company Limited</div><div style="font-size:11px;">西九龍廢物轉運站 | West Kowloon Transfer Station</div></div><div style="text-align:right;"><div style="font-size:12px;font-weight:bold;">環境保護署查閱 / Checked By EPD: _________________</div></div></div><div style="text-align:center;margin:12px 0;"><div style="font-size:20px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div></div><div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:8px;">車輛進入預先登記記錄</div><div style="font-size:14px;text-align:center;margin-bottom:12px;">Registered Vehicle Log</div>${pageInfo}<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Item</th><th>Ref No.</th><th>Company</th><th>Vehicle No.</th><th>Vehicle Type</th><th>Contact</th><th>Tel</th><th>Time In</th><th>Purpose</th></tr></thead><tbody>${tableRows}</tbody></table><div style="margin-top:12px;font-size:12px;text-align:center;">系統產生之記錄，請查閱後簽署</div><div style="font-size:10px;text-align:center;">System generated record, please sign after checking</div>`;
+      pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:15px;font-family:Arial,sans-serif;';
+      
+      let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:11px;color:#666;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
+      
+      pdfContainer.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:2px solid #ccc;padding-bottom:8px;">
+          <div>
+            <div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div>
+            <div style="font-size:12px;color:#555;">China Harbour Engineering Company Limited</div>
+            <div style="font-size:11px;color:#666;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
+          </div>
+          <div style="text-align:right;font-size:11px;color:#555;">
+            環境保護署查閱 / Checked By EPD: _________________
+          </div>
+        </div>
+        <div style="text-align:center;margin:10px 0;">
+          <div style="font-size:20px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
+        </div>
+        <div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:6px;">車輛進入預先登記記錄</div>
+        <div style="font-size:13px;text-align:center;margin-bottom:10px;color:#555;">Registered Vehicle Log</div>
+        ${pageInfo}
+        <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;">
+          <thead>
+            <tr style="background:#f0f0f0;">
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.item};">項目<br><span style="font-weight:normal;font-size:11px;">Item</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.ref_no};">參考編號<br><span style="font-weight:normal;font-size:11px;">Ref No.</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.company};">公司<br><span style="font-weight:normal;font-size:11px;">Company</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.vehicle_no};">車牌<br><span style="font-weight:normal;font-size:11px;">Vehicle No.</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.vehicle_type};">車輛種類<br><span style="font-weight:normal;font-size:11px;">Vehicle Type</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.contact};">聯絡人<br><span style="font-weight:normal;font-size:11px;">Contact</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.tel};">電話<br><span style="font-weight:normal;font-size:11px;">Tel</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.time_in};">入站時間<br><span style="font-weight:normal;font-size:11px;">Time In</span></th>
+              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:13px;width:${colWidths.purpose};">目的<br><span style="font-weight:normal;font-size:11px;">Purpose</span></th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+        <div style="margin-top:10px;font-size:12px;text-align:center;color:#555;">系統產生之記錄，請查閱後簽署</div>
+        <div style="font-size:10px;text-align:center;color:#888;">System generated record, please sign after checking</div>
+      `;
+      
       document.body.appendChild(pdfContainer);
       await new Promise(r => setTimeout(r, 200));
       const canvas = await html2canvas(pdfContainer, { scale: 2.5, backgroundColor: '#ffffff' });
       document.body.removeChild(pdfContainer);
+      
       const imgData = canvas.toDataURL('image/png');
       const imgWidth = 280;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      if (page === 0) pdf.addImage(imgData, 'PNG', 8, 6, imgWidth, imgHeight);
-      else { pdf.addPage(); pdf.addImage(imgData, 'PNG', 8, 6, imgWidth, imgHeight); }
+      
+      if (page === 0) {
+        pdf.addImage(imgData, 'PNG', 8, 6, imgWidth, imgHeight);
+      } else {
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 8, 6, imgWidth, imgHeight);
+      }
     }
+    
     pdf.save(`WKTS_VehicleLog_${selectedDate}.pdf`);
     document.body.removeChild(loadingDiv);
     alert(`✅ PDF 已下載！`);
