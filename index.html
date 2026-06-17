@@ -135,35 +135,57 @@
       font-size: 0.9rem !important; 
     }
     
+    /* ===== 成功頁面 ===== */
     .ref-box {
       background: #f0fff4;
       border: 2px dashed #38a169;
       border-radius: 20px;
-      padding: 16px 12px;
+      padding: 20px 16px;
       text-align: center;
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
+    
+    /* 成功頁面標題 - 中英文上下分行 */
+    .success-title .chi-text {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #38a169;
+    }
+    .success-title .eng-text {
+      display: block;
+      font-size: 1.0rem;
+      font-weight: 400;
+      color: #555;
+      margin-top: 4px;
+    }
+    
+    /* 成功頁面表格 - 字體放大 */
     .success-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 10px 0;
-      font-size: 0.75rem;
+      margin: 14px 0;
+      font-size: 1.0rem;
       table-layout: fixed;
     }
     .success-table th,
     .success-table td {
       border: 1px solid #cbd5e0;
-      padding: 6px 4px;
+      padding: 12px 10px;
       text-align: left;
       word-break: break-word;
-      font-size: 0.75rem;
+      font-size: 1.0rem;
     }
     .success-table th {
       background: #e6f7f7;
-      font-weight: 600;
+      font-weight: 700;
       width: 50%;
     }
+    .success-table td {
+      font-weight: 500;
+    }
+    /* ===== 結束成功頁面 ===== */
     
     .reminder-box .eng-text {
       font-size: inherit !important;
@@ -376,6 +398,20 @@
         font-size: 0.8rem;
       }
       .subtitle-eng { font-size: 1rem !important; }
+      .success-table {
+        font-size: 0.85rem;
+      }
+      .success-table th,
+      .success-table td {
+        padding: 10px 6px;
+        font-size: 0.85rem;
+      }
+      .success-title .chi-text {
+        font-size: 1.2rem;
+      }
+      .success-title .eng-text {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -522,7 +558,10 @@
   
   <div id="successSection" class="card hidden">
     <div class="ref-box">
-      <h3 style="color:#38a169;">🎉 登記申請已送出</h3>
+      <div class="success-title">
+        <span class="chi-text">🎉 登記申請已送出</span>
+        <span class="eng-text">Application Submitted Successfully</span>
+      </div>
       <table id="successRefTable" class="success-table">
         <thead>
           <tr><th>到訪日期 / Date</th><th>參考編號 / Ref No.</th></tr>
@@ -847,7 +886,7 @@ async function submitToGoogleSheet(formData, refNo, date) {
     params.append('time_in', formData.visitTime);
     params.append('purpose', formData.purpose);
     params.append('vehicle_type', formData.vehicleType);
-    params.append('visit_date', "'" + date);  // ✅ 加入單引號
+    params.append('visit_date', "'" + date);
     
     const url = `${API}?${params.toString()}`;
     console.log("提交到:", url);
@@ -990,7 +1029,7 @@ function resetForm() {
   document.getElementById('timeSelect').value = '';
 }
 
-// ==================== PDF 匯出（含中英對照 + 欄位調整） ====================
+// ==================== PDF 匯出（資料列無中文對照） ====================
 async function exportPDF() {
   let selectedDate = document.getElementById('exportDate').value;
   if (!selectedDate) { 
@@ -1025,7 +1064,6 @@ async function exportPDF() {
       const pageData = list.slice(start, end);
       let tableRows = '';
       
-      // 欄位寬度（Ref No. 和 Vehicle Type 變窄，Purpose 變寬）
       const colWidths = {
         item: '5%',
         ref_no: '10%',
@@ -1041,15 +1079,15 @@ async function exportPDF() {
       pageData.forEach((item, idx) => {
         const globalIndex = start + idx + 1;
         tableRows += `<tr style="background:#ffffff;">
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.item};">${globalIndex}<span style="display:block;font-size:10px;color:#666;">項目</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}<span style="display:block;font-size:10px;color:#666;">參考編號</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.company};">${escapeHtml(item.company)}<span style="display:block;font-size:10px;color:#666;">公司</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}<span style="display:block;font-size:10px;color:#666;font-weight:normal;">車牌</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.vehicle_type};">${escapeHtml(item.vehicle_type)}<span style="display:block;font-size:10px;color:#666;">車輛種類</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}<span style="display:block;font-size:10px;color:#666;">聯絡人</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}<span style="display:block;font-size:10px;color:#666;">電話</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.time_in};">${item.visit_time}<span style="display:block;font-size:10px;color:#666;">入站時間</span></td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}<span style="display:block;font-size:10px;color:#666;">目的</span></td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.item};">${globalIndex}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.company};">${escapeHtml(item.company)}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.vehicle_type};">${escapeHtml(item.vehicle_type)}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.time_in};">${item.visit_time}</td>
+          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:12px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}</td>
         <\/tr>`;
       });
       
