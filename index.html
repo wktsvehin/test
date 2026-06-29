@@ -62,46 +62,34 @@
     }
     
     /* ===== 職員面板英文字體 - 獨立控制 ===== */
-    
-    /* 1. Staff Verification - 獨立控制 */
     .staff-verify-eng {
       font-size: 1.2rem;
       font-weight: 700;
       color: #2d3748;
       margin-left: 8px;
     }
-    
-    /* 2. Gate Check System - 獨立控制 */
     .gate-title-eng {
       font-size: 1.0rem;
       font-weight: 700;
       color: #2c7a7b;
     }
-    
-    /* 3. Export PDF - 獨立控制 */
     .export-pdf-eng {
       font-size: 0.9rem;
       font-weight: 400;
       color: #ffffff;
       margin-top: 2px;
     }
-    
-    /* 4. Logout - 獨立控制 */
     .logout-eng {
       font-size: 0.9rem;
       font-weight: 400;
       color: inherit;
       margin-top: 2px;
     }
-    
-    /* 5. Today's Confirmed List - 獨立控制 */
     .today-list-eng {
       font-size: 1.0rem;
       font-weight: 700;
       color: #2c7a7b;
     }
-    
-    /* ===== 結束職員面板英文字體 ===== */
     
     .alert-cutoff .eng-text, 
     .alert-reminder .eng-text { font-size: inherit !important; line-height: 1.3; }
@@ -145,7 +133,6 @@
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
-    
     .success-title .chi-text {
       display: block;
       font-size: 1.5rem;
@@ -159,7 +146,6 @@
       color: #555;
       margin-top: 4px;
     }
-    
     .success-table {
       width: 100%;
       border-collapse: collapse;
@@ -536,12 +522,30 @@
       font-size: 0.8rem;
       font-weight: 600;
     }
-    .check-status-text {
+    .pdf-date-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .pdf-date-selector label {
+      font-weight: 600;
       font-size: 0.9rem;
       color: #2d3748;
-      margin-top: 4px;
     }
-    /* ===== 結束閘口核對系統樣式 ===== */
+    .pdf-date-selector input[type="date"] {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #1a202c;
+    }
+    .pdf-date-selector input[type="date"]:focus {
+      outline: none;
+      border-color: #2c7a7b;
+    }
     
     @media (max-width:480px) { 
       body { padding: 12px; max-width: 100%; } 
@@ -590,6 +594,10 @@
       .check-buttons button {
         width: 100%;
       }
+      .pdf-date-selector {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
@@ -614,6 +622,7 @@
 
 <!-- 訪客面板 -->
 <div id="visitorPanel">
+  <!-- 訪客登記內容保持不變 -->
   <div id="formSection" class="card">
     <div class="alert-cutoff">
       <div style="font-weight:bold;"><span class="cutoff-icon">⏰</span> 預約截數提示：</div>
@@ -866,7 +875,6 @@
 let isLoggedIn = false;
 let cachedData = [];
 let isSubmitting = false;
-// ✅ 更新為新的 API 網址
 const API = "https://script.google.com/macros/s/AKfycbyg5Ln2csco7jBuKrzYGfBXQ7LwxJq4wParG2QLAPujavlm4XgHA6v_7mTB7ft7R-Kl/exec";
 let pendingSubmissionData = null;
 let selectedDates = [];
@@ -995,6 +1003,23 @@ function updateSelectedHint() {
   }
 }
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+}
+
+function showLoading(show, message) {
+  let existing = document.getElementById('globalLoading');
+  if (show) {
+    if (existing) existing.remove();
+    let div = document.createElement('div');
+    div.id = 'globalLoading';
+    div.className = 'loading-overlay';
+    div.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><div>${message || '處理中...'}</div></div>`;
+    document.body.appendChild(div);
+  } else if (existing) existing.remove();
+}
+
 // ==================== 核心功能：載入核對期間資料 ====================
 
 async function loadCheckPeriodData() {
@@ -1005,7 +1030,6 @@ async function loadCheckPeriodData() {
     const range = getCheckPeriodRange();
     display.textContent = `時間範圍：${formatDateForDisplay(range.start)} ~ ${formatDateForDisplay(range.end)}`;
     
-    // 使用 action=getCheckPeriod 參數
     const url = `${API}?action=getCheckPeriod`;
     const response = await fetch(url);
     const data = await response.json();
@@ -1015,12 +1039,10 @@ async function loadCheckPeriodData() {
       
       if (data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;">📭 該時間範圍內暫無申請記錄</td></tr>';
-        // 檢查是否有已儲存的核對狀態
         await loadCheckStatus();
         return;
       }
       
-      // 渲染表格
       tbody.innerHTML = data.map((item, idx) => `
         <tr>
           <td>${idx + 1}</td>
@@ -1036,7 +1058,6 @@ async function loadCheckPeriodData() {
         </tr>
       `).join('');
       
-      // 載入核對狀態
       await loadCheckStatus();
     } else {
       tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:red;">❌ 資料格式錯誤</td></tr>';
@@ -1051,9 +1072,7 @@ async function loadCheckPeriodData() {
 
 async function loadCheckStatus() {
   try {
-    // 從第一筆資料讀取核對狀態（該時間範圍內所有記錄應一致）
     if (checkPeriodData.length === 0) {
-      // 嘗試從 API 讀取最新狀態
       const url = `${API}?action=getCheckStatus`;
       const response = await fetch(url);
       const status = await response.json();
@@ -1078,7 +1097,6 @@ async function loadCheckStatus() {
       return;
     }
     
-    // 從第一筆資料讀取
     const first = checkPeriodData[0];
     const checChecked = first.chec_checked === true || first.chec_checked === 'true';
     const epdChecked = first.epd_checked === true || first.epd_checked === 'true';
@@ -1138,7 +1156,6 @@ async function confirmCheck() {
   const epdName = document.getElementById('epdCheckerName').value;
   const remark = document.getElementById('remarkInput').value.trim();
   
-  // 檢查是否至少有一方填寫了姓名並已勾選
   const checHasName = checName.length > 0;
   const epdHasName = epdName.length > 0;
   
@@ -1147,40 +1164,33 @@ async function confirmCheck() {
     return;
   }
   
-  // 如果 CHEC 已填寫姓名但未勾選
   if (checHasName && !document.getElementById('checChecked').checked) {
     const confirmCheck = confirm('CHEC 核對人員已填寫，是否確認核對？');
     if (!confirmCheck) return;
-    // 勾選 CHEC
     document.getElementById('checChecked').checked = true;
   }
   
-  // 如果 EPD 已選擇但未勾選
   if (epdHasName && !document.getElementById('epdChecked').checked) {
     const confirmCheck = confirm('EPD 核對人員已選擇，是否確認核對？');
     if (!confirmCheck) return;
     document.getElementById('epdChecked').checked = true;
   }
   
-  // 如果兩者都未勾選
   if (!document.getElementById('checChecked').checked && !document.getElementById('epdChecked').checked) {
     alert('請至少勾選一個核對項目 (CHEC checked 或 EPD checked)');
     return;
   }
   
-  // 如果 CHEC 已勾選但沒有姓名
   if (document.getElementById('checChecked').checked && !checHasName) {
     alert('CHEC 已勾選，請輸入姓名/職位');
     return;
   }
   
-  // 如果 EPD 已勾選但沒有選擇人員
   if (document.getElementById('epdChecked').checked && !epdHasName) {
     alert('EPD 已勾選，請選擇 EPD 人員');
     return;
   }
   
-  // 準備提交資料
   const params = new URLSearchParams();
   params.append('action', 'saveCheck');
   params.append('chec_checked', document.getElementById('checChecked').checked);
@@ -1201,7 +1211,6 @@ async function confirmCheck() {
     if (result.result === 'success') {
       alert(`✅ 核對資料已提交！\n\n已更新 ${result.updated || 0} 筆記錄`);
       
-      // 鎖定已核對的部分
       if (document.getElementById('checChecked').checked) {
         document.getElementById('checCheckerName').disabled = true;
         document.getElementById('checChecked').disabled = true;
@@ -1214,8 +1223,6 @@ async function confirmCheck() {
       }
       
       updateSubmitStatus();
-      
-      // 重新載入資料以更新狀態
       await loadCheckPeriodData();
     } else {
       alert('❌ 提交失敗，請稍後再試');
@@ -1227,36 +1234,63 @@ async function confirmCheck() {
   }
 }
 
-// ==================== 匯出核對期間 PDF ====================
+// ==================== 匯出核對期間 PDF（用戶可選擇日期） ====================
 
 async function exportCheckPeriodPDF() {
-  if (checkPeriodData.length === 0) {
-    alert('目前沒有申請記錄可匯出');
+  // 讓用戶選擇日期
+  const userSelectedDate = prompt('請輸入要匯出的日期 (格式: YYYY-MM-DD)\n例如: 2026-06-29\n\n留空則匯出今日申請名單', getTodayString());
+  
+  if (userSelectedDate === null) {
+    return; // 用戶取消
+  }
+  
+  let selectedDate = userSelectedDate.trim();
+  
+  // 驗證日期格式
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(selectedDate)) {
+    alert('❌ 日期格式錯誤，請使用 YYYY-MM-DD 格式');
     return;
   }
   
-  // 獲取核對狀態
-  const checChecked = document.getElementById('checChecked').checked;
-  const checName = document.getElementById('checCheckerName').value.trim();
-  const epdChecked = document.getElementById('epdChecked').checked;
-  const epdName = document.getElementById('epdCheckerName').value;
-  const remark = document.getElementById('remarkInput').value.trim();
+  // 檢查日期是否有效
+  const dateObj = new Date(selectedDate);
+  if (isNaN(dateObj.getTime())) {
+    alert('❌ 無效的日期');
+    return;
+  }
   
-  const range = getCheckPeriodRange();
-  const periodLabel = `${formatDateForDisplay(range.start)} ~ ${formatDateForDisplay(range.end)}`;
+  // 從 cachedData 過濾該日期的記錄
+  if (cachedData.length === 0) {
+    await loadFreshData();
+  }
+  
+  const list = cachedData.filter(item => item.visit_date === selectedDate);
+  
+  if (list.length === 0) {
+    alert(`📭 沒有 ${selectedDate} 的車輛紀錄`);
+    return;
+  }
+  
+  // 獲取該日期的核對狀態（從第一筆記錄讀取）
+  const firstRecord = list[0];
+  const checChecked = firstRecord.chec_checked === true || firstRecord.chec_checked === 'true';
+  const epdChecked = firstRecord.epd_checked === true || firstRecord.epd_checked === 'true';
+  const checName = firstRecord.chec_checker_name_post || '';
+  const epdName = firstRecord.epd_checker_name_post || '';
+  const remark = firstRecord.remark || '';
   
   showLoading(true, '正在產生 PDF...');
   
   try {
     const { jsPDF } = window.jspdf;
     const ROWS_PER_PAGE = 10;
-    const totalPages = Math.ceil(checkPeriodData.length / ROWS_PER_PAGE);
+    const totalPages = Math.ceil(list.length / ROWS_PER_PAGE);
     const pdf = new jsPDF('l', 'mm', 'a4');
     
     for (let page = 0; page < totalPages; page++) {
       const start = page * ROWS_PER_PAGE;
-      const end = Math.min(start + ROWS_PER_PAGE, checkPeriodData.length);
-      const pageData = checkPeriodData.slice(start, end);
+      const end = Math.min(start + ROWS_PER_PAGE, list.length);
+      const pageData = list.slice(start, end);
       let tableRows = '';
       
       const colWidths = {
@@ -1337,8 +1371,7 @@ async function exportCheckPeriodPDF() {
           </div>
         </div>
         <div style="text-align:center;margin:10px 0;">
-          <div style="font-size:18px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 今日申請名單 / Today's List</div>
-          <div style="font-size:12px;color:#666;margin-top:4px;">${periodLabel}</div>
+          <div style="font-size:18px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
         </div>
         <div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:6px;">車輛進入預先登記記錄</div>
         <div style="font-size:13px;text-align:center;margin-bottom:10px;color:#555;">Registered Vehicle Log</div>
@@ -1381,9 +1414,9 @@ async function exportCheckPeriodPDF() {
       }
     }
     
-    pdf.save(`WKTS_CheckPeriod_${getTodayString()}.pdf`);
+    pdf.save(`WKTS_VehicleLog_${selectedDate}.pdf`);
     showLoading(false);
-    alert('✅ PDF 已下載！');
+    alert(`✅ PDF 已下載！`);
   } catch (err) {
     showLoading(false);
     console.error('PDF 生成失敗:', err);
@@ -1392,23 +1425,6 @@ async function exportCheckPeriodPDF() {
 }
 
 // ==================== 現有功能函數 ====================
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
-}
-
-function showLoading(show, message) {
-  let existing = document.getElementById('globalLoading');
-  if (show) {
-    if (existing) existing.remove();
-    let div = document.createElement('div');
-    div.id = 'globalLoading';
-    div.className = 'loading-overlay';
-    div.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><div>${message || '處理中...'}</div></div>`;
-    document.body.appendChild(div);
-  } else if (existing) existing.remove();
-}
 
 async function loadFreshData() {
   try {
@@ -1421,6 +1437,8 @@ async function loadFreshData() {
         let vehicleNo = item.vehicle_no || item.車牌 || '';
         let visitDate = item.visit_date || item.到訪日期 || item.date || '';
         let rawTime = item.time_in || item.入站時間 || '';
+        let checChecked = item.chec_checked === true || item.chec_checked === 'true';
+        let epdChecked = item.epd_checked === true || item.epd_checked === 'true';
         
         return {
           ref_no: item.ref_no || item.參考編號 || '',
@@ -1431,7 +1449,12 @@ async function loadFreshData() {
           tel_no: item.tel_no || item.電話 || '',
           visit_time: formatTimeOnly(rawTime),
           purpose: item.purpose || item.目的 || '',
-          visit_date: visitDate
+          visit_date: visitDate,
+          chec_checked: checChecked,
+          chec_checker_name_post: item.chec_checker_name_post || '',
+          epd_checked: epdChecked,
+          epd_checker_name_post: item.epd_checker_name_post || '',
+          remark: item.remark || ''
         };
       });
       
