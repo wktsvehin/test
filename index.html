@@ -1818,15 +1818,15 @@ async function exportCheckPeriodPDF() {
         const globalIndex = start + idx + 1;
         const formattedVehicleType = formatVehicleTypeForPDF(item.vehicle_type);
         tableRows += `<tr style="background:#ffffff;">
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.item};">${globalIndex}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.company};">${escapeHtml(item.company)}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.vehicle_type};">${formattedVehicleType}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.time_in};">${escapeHtml(item.time_in)}</td>
-          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.item};">${globalIndex}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.company};">${escapeHtml(item.company)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.vehicle_type};">${formattedVehicleType}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.time_in};">${escapeHtml(item.time_in)}</td>
+          <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}</td>
         <\/tr>`;
       });
       
@@ -1857,12 +1857,12 @@ async function exportCheckPeriodPDF() {
         </div>`;
       }
       
-      // 備註顯示 - 直接顯示，唔再加編號（字體 +4px）
+      // 備註顯示 - 直接顯示，唔再加編號（字體 14px）
       let remarkHtml = '';
       if (remark) {
         const remarkLines = remark.split('\n').filter(line => line.trim());
         if (remarkLines.length > 0) {
-          remarkHtml = `<div style="font-size:15px;color:#555;margin-top:12px;padding:12px 16px;background:#f8f8f8;border-radius:4px;text-align:left;">
+          remarkHtml = `<div style="font-size:14px;color:#555;margin-top:12px;padding:10px 14px;background:#f8f8f8;border-radius:4px;text-align:left;">
             <strong>備註 / Remark：</strong><br>
             ${remarkLines.map(function(line) {
               return escapeHtml(line);
@@ -1891,15 +1891,15 @@ async function exportCheckPeriodPDF() {
         <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.item};">項目<br><span style="font-weight:normal;font-size:14px;">Item</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.ref_no};">參考編號<br><span style="font-weight:normal;font-size:14px;">Ref No.</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.company};">公司<br><span style="font-weight:normal;font-size:14px;">Company</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.vehicle_no};">車牌<br><span style="font-weight:normal;font-size:14px;">Vehicle No.</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.vehicle_type};">車輛種類<br><span style="font-weight:normal;font-size:14px;">Vehicle Type</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.contact};">聯絡人<br><span style="font-weight:normal;font-size:14px;">Contact</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.tel};">電話<br><span style="font-weight:normal;font-size:14px;">Tel</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.time_in};">入站時間<br><span style="font-weight:normal;font-size:14px;">Time In</span></th>
-              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.purpose};">目的<br><span style="font-weight:normal;font-size:14px;">Purpose</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.item};">項目<br><span style="font-weight:normal;font-size:14px;">Item</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.ref_no};">參考編號<br><span style="font-weight:normal;font-size:14px;">Ref No.</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.company};">公司<br><span style="font-weight:normal;font-size:14px;">Company</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.vehicle_no};">車牌<br><span style="font-weight:normal;font-size:14px;">Vehicle No.</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.vehicle_type};">車輛種類<br><span style="font-weight:normal;font-size:14px;">Vehicle Type</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.contact};">聯絡人<br><span style="font-weight:normal;font-size:14px;">Contact</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.tel};">電話<br><span style="font-weight:normal;font-size:14px;">Tel</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.time_in};">入站時間<br><span style="font-weight:normal;font-size:14px;">Time In</span></th>
+              <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.purpose};">目的<br><span style="font-weight:normal;font-size:14px;">Purpose</span></th>
             </tr>
           </thead>
           <tbody>${tableRows}</tbody>
@@ -1950,19 +1950,19 @@ async function exportBlankPDF() {
     const pdfContainer = document.createElement('div');
     pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:25px;font-family:Arial,sans-serif;';
     
-    // 建構空白表格行（10 行）- padding 加大，字體 15px
+    // 建構空白表格行（10 行）- padding 6px，字體 14px
     let blankRows = '';
     for (let i = 0; i < ROWS_PER_PAGE; i++) {
       blankRows += `<tr style="background:#ffffff;">
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:5%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:12%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:14%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:12%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:12%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:8%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:8%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:8%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:21%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:5%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:12%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:14%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:12%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:12%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:8%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:8%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:8%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:6px 6px;vertical-align:middle;text-align:center;font-size:14px;width:21%;">&nbsp;</td>
       </tr>`;
     }
     
@@ -1972,10 +1972,9 @@ async function exportBlankPDF() {
       <span>☐ EPD 已核對（姓名/職位：___________）</span>
     </div>`;
     
-    // 空白備註 - 字體 15px，padding 加大留白
-    let remarkHtml = `<div style="font-size:15px;color:#555;margin-top:12px;padding:12px 16px;background:#f8f8f8;border-radius:4px;text-align:left;">
+    // 空白備註 - 字體 14px，2 行底線
+    let remarkHtml = `<div style="font-size:14px;color:#555;margin-top:12px;padding:10px 14px;background:#f8f8f8;border-radius:4px;text-align:left;">
       <strong>備註 / Remark：</strong><br>
-      ___________________________________________________________________________________________<br>
       ___________________________________________________________________________________________<br>
       ___________________________________________________________________________________________
     </div>`;
@@ -1999,15 +1998,15 @@ async function exportBlankPDF() {
       <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;">
         <thead>
           <tr style="background:#f0f0f0;">
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:5%;">項目<br><span style="font-weight:normal;font-size:14px;">Item</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:12%;">參考編號<br><span style="font-weight:normal;font-size:14px;">Ref No.</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:14%;">公司<br><span style="font-weight:normal;font-size:14px;">Company</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:12%;">車牌<br><span style="font-weight:normal;font-size:14px;">Vehicle No.</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:12%;">車輛種類<br><span style="font-weight:normal;font-size:14px;">Vehicle Type</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:8%;">聯絡人<br><span style="font-weight:normal;font-size:14px;">Contact</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:8%;">電話<br><span style="font-weight:normal;font-size:14px;">Tel</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:8%;">入站時間<br><span style="font-weight:normal;font-size:14px;">Time In</span></th>
-            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:21%;">目的<br><span style="font-weight:normal;font-size:14px;">Purpose</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:5%;">項目<br><span style="font-weight:normal;font-size:14px;">Item</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:12%;">參考編號<br><span style="font-weight:normal;font-size:14px;">Ref No.</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:14%;">公司<br><span style="font-weight:normal;font-size:14px;">Company</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:12%;">車牌<br><span style="font-weight:normal;font-size:14px;">Vehicle No.</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:12%;">車輛種類<br><span style="font-weight:normal;font-size:14px;">Vehicle Type</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:8%;">聯絡人<br><span style="font-weight:normal;font-size:14px;">Contact</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:8%;">電話<br><span style="font-weight:normal;font-size:14px;">Tel</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:8%;">入站時間<br><span style="font-weight:normal;font-size:14px;">Time In</span></th>
+            <th style="border:1px solid #000;padding:8px 6px;text-align:center;font-weight:bold;font-size:16px;width:21%;">目的<br><span style="font-weight:normal;font-size:14px;">Purpose</span></th>
           </tr>
         </thead>
         <tbody>${blankRows}</tbody>
