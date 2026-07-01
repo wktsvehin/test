@@ -1857,9 +1857,9 @@ async function exportCheckPeriodPDF() {
         </div>`;
       }
       
-      // 備註顯示 - 直接顯示，唔再加編號（字體 14px）
+      // 備註顯示 - 只喺最後一頁顯示
       let remarkHtml = '';
-      if (remark) {
+      if (page === totalPages - 1 && remark) {
         const remarkLines = remark.split('\n').filter(line => line.trim());
         if (remarkLines.length > 0) {
           remarkHtml = `<div style="font-size:14px;color:#555;margin-top:12px;padding:10px 14px;background:#f8f8f8;border-radius:4px;text-align:left;">
