@@ -1757,42 +1757,43 @@ async function exportCheckPeriodPDF() {
       const pageData = list.slice(start, end);
       let tableRows = '';
       
+      // 欄位寬度調整（更舒適）
       const colWidths = {
         item: '5%',
-        ref_no: '10%',
-        company: '12%',
-        vehicle_no: '10%',
+        ref_no: '12%',
+        company: '14%',
+        vehicle_no: '12%',
         vehicle_type: '12%',
         contact: '8%',
         tel: '8%',
         time_in: '8%',
-        purpose: '27%'
+        purpose: '21%'
       };
       
       pageData.forEach((item, idx) => {
         const globalIndex = start + idx + 1;
         tableRows += `<tr style="background:#ffffff;">
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.item};">${globalIndex}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.company};">${escapeHtml(item.company)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.vehicle_type};">${escapeHtml(item.vehicle_type)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.time_in};">${escapeHtml(item.time_in)}</td>
-          <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.item};">${globalIndex}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.ref_no};">${escapeHtml(item.ref_no)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.company};">${escapeHtml(item.company)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.vehicle_no};font-weight:bold;color:#2c7a7b;">${escapeHtml(item.vehicle_no)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.vehicle_type};">${escapeHtml(item.vehicle_type)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.contact};">${escapeHtml(item.contact_person)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.tel};">${escapeHtml(item.tel_no)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.time_in};">${escapeHtml(item.time_in)}</td>
+          <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:${colWidths.purpose};word-wrap:break-word;word-break:break-word;">${escapeHtml(item.purpose)}</td>
         <\/tr>`;
       });
       
       const pdfContainer = document.createElement('div');
       pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:15px;font-family:Arial,sans-serif;';
       
-      let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:11px;color:#666;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
+      let pageInfo = totalPages > 1 ? `<div style="text-align:right;font-size:15px;color:#666;margin-bottom:5px;">第 ${page+1} 頁 / 共 ${totalPages} 頁</div>` : '';
       
-      // 建構核對狀態顯示
+      // 建構核對狀態顯示（字體 +4px）
       let checkStatusHtml = '';
       if (checChecked || epdChecked) {
-        checkStatusHtml = `<div style="display:flex;justify-content:flex-end;gap:20px;font-size:12px;margin-bottom:8px;flex-wrap:wrap;">`;
+        checkStatusHtml = `<div style="display:flex;justify-content:flex-end;gap:20px;font-size:16px;margin-bottom:8px;flex-wrap:wrap;">`;
         if (checChecked) {
           checkStatusHtml += `<span>☑ CHEC 已核對（姓名/職位：${escapeHtml(checName) || '___________'}）</span>`;
         } else {
@@ -1805,21 +1806,20 @@ async function exportCheckPeriodPDF() {
         }
         checkStatusHtml += `</div>`;
       } else {
-        checkStatusHtml = `<div style="display:flex;justify-content:flex-end;gap:20px;font-size:12px;margin-bottom:8px;flex-wrap:wrap;">
+        checkStatusHtml = `<div style="display:flex;justify-content:flex-end;gap:20px;font-size:16px;margin-bottom:8px;flex-wrap:wrap;">
           <span>☐ CHEC 已核對（姓名/職位：___________）</span>
           <span>☐ EPD 已核對（姓名/職位：___________）</span>
         </div>`;
       }
       
-      // 備註顯示 - 直接顯示，唔再加編號
+      // 備註顯示 - 直接顯示，唔再加編號（字體 +4px）
       let remarkHtml = '';
       if (remark) {
         const remarkLines = remark.split('\n').filter(line => line.trim());
         if (remarkLines.length > 0) {
-          remarkHtml = `<div style="font-size:11px;color:#555;margin-top:8px;padding:8px 12px;background:#f8f8f8;border-radius:4px;text-align:left;">
+          remarkHtml = `<div style="font-size:15px;color:#555;margin-top:8px;padding:8px 12px;background:#f8f8f8;border-radius:4px;text-align:left;">
             <strong>備註 / Remark：</strong><br>
             ${remarkLines.map(function(line) {
-              // 直接顯示，唔再加編號（因為已經有）
               return escapeHtml(line);
             }).join('<br>')}
           </div>`;
@@ -1829,39 +1829,39 @@ async function exportCheckPeriodPDF() {
       pdfContainer.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:2px solid #ccc;padding-bottom:8px;">
           <div>
-            <div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div>
-            <div style="font-size:12px;color:#555;">China Harbour Engineering Company Limited</div>
-            <div style="font-size:11px;color:#666;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
+            <div style="font-size:20px;font-weight:bold;">中國港灣工程有限責任公司</div>
+            <div style="font-size:16px;color:#555;">China Harbour Engineering Company Limited</div>
+            <div style="font-size:15px;color:#666;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
           </div>
-          <div style="text-align:right;font-size:11px;color:#555;">
+          <div style="text-align:right;font-size:16px;color:#555;">
             ${checkStatusHtml}
           </div>
         </div>
         <div style="text-align:center;margin:10px 0;">
-          <div style="font-size:18px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
+          <div style="font-size:22px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：${selectedDate}</div>
         </div>
-        <div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:6px;">車輛進入預先登記記錄</div>
-        <div style="font-size:13px;text-align:center;margin-bottom:10px;color:#555;">Registered Vehicle Log</div>
+        <div style="font-size:20px;font-weight:bold;text-align:center;margin-bottom:6px;">車輛進入預先登記記錄</div>
+        <div style="font-size:17px;text-align:center;margin-bottom:10px;color:#555;">Registered Vehicle Log</div>
         ${pageInfo}
         <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;">
           <thead>
             <tr style="background:#f0f0f0;">
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.item};">項目<br><span style="font-weight:normal;font-size:10px;">Item</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.ref_no};">參考編號<br><span style="font-weight:normal;font-size:10px;">Ref No.</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.company};">公司<br><span style="font-weight:normal;font-size:10px;">Company</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.vehicle_no};">車牌<br><span style="font-weight:normal;font-size:10px;">Vehicle No.</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.vehicle_type};">車輛種類<br><span style="font-weight:normal;font-size:10px;">Vehicle Type</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.contact};">聯絡人<br><span style="font-weight:normal;font-size:10px;">Contact</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.tel};">電話<br><span style="font-weight:normal;font-size:10px;">Tel</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.time_in};">入站時間<br><span style="font-weight:normal;font-size:10px;">Time In</span></th>
-              <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:${colWidths.purpose};">目的<br><span style="font-weight:normal;font-size:10px;">Purpose</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.item};">項目<br><span style="font-weight:normal;font-size:14px;">Item</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.ref_no};">參考編號<br><span style="font-weight:normal;font-size:14px;">Ref No.</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.company};">公司<br><span style="font-weight:normal;font-size:14px;">Company</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.vehicle_no};">車牌<br><span style="font-weight:normal;font-size:14px;">Vehicle No.</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.vehicle_type};">車輛種類<br><span style="font-weight:normal;font-size:14px;">Vehicle Type</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.contact};">聯絡人<br><span style="font-weight:normal;font-size:14px;">Contact</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.tel};">電話<br><span style="font-weight:normal;font-size:14px;">Tel</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.time_in};">入站時間<br><span style="font-weight:normal;font-size:14px;">Time In</span></th>
+              <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:${colWidths.purpose};">目的<br><span style="font-weight:normal;font-size:14px;">Purpose</span></th>
             </tr>
           </thead>
           <tbody>${tableRows}</tbody>
         </table>
         ${remarkHtml}
-        <div style="margin-top:8px;font-size:11px;text-align:center;color:#888;">系統產生之記錄，請查閱後續簽署</div>
-        <div style="font-size:10px;text-align:center;color:#999;">System generated record, please sign after checking</div>
+        <div style="margin-top:8px;font-size:15px;text-align:center;color:#888;">系統產生之記錄，請查閱後續簽署</div>
+        <div style="font-size:14px;text-align:center;color:#999;">System generated record, please sign after checking</div>
       `;
       
       document.body.appendChild(pdfContainer);
@@ -1905,71 +1905,71 @@ async function exportBlankPDF() {
     const pdfContainer = document.createElement('div');
     pdfContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1200px;background:white;padding:15px;font-family:Arial,sans-serif;';
     
-    // 建構空白表格行（10 行）
+    // 建構空白表格行（10 行）- padding 加大，字體 15px
     let blankRows = '';
     for (let i = 0; i < ROWS_PER_PAGE; i++) {
       blankRows += `<tr style="background:#ffffff;">
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:5%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:10%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:12%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:10%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:12%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:8%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:8%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:8%;">&nbsp;</td>
-        <td style="border:1px solid #000000;padding:8px 4px;vertical-align:middle;text-align:center;font-size:11px;width:27%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:5%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:12%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:14%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:12%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:12%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:8%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:8%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:8%;">&nbsp;</td>
+        <td style="border:1px solid #000000;padding:12px 8px;vertical-align:middle;text-align:center;font-size:15px;width:21%;">&nbsp;</td>
       </tr>`;
     }
     
-    // 核對狀態（全部未核對）
-    let checkStatusHtml = `<div style="display:flex;justify-content:flex-end;gap:20px;font-size:12px;margin-bottom:8px;flex-wrap:wrap;">
+    // 核對狀態（全部未核對）- 字體 16px
+    let checkStatusHtml = `<div style="display:flex;justify-content:flex-end;gap:20px;font-size:16px;margin-bottom:8px;flex-wrap:wrap;">
       <span>☐ CHEC 已核對（姓名/職位：___________）</span>
       <span>☐ EPD 已核對（姓名/職位：___________）</span>
     </div>`;
     
-    // 空白備註
-    let remarkHtml = `<div style="font-size:11px;color:#555;margin-top:8px;padding:8px 12px;background:#f8f8f8;border-radius:4px;text-align:left;">
+    // 空白備註 - 字體 15px，底線同表格一樣長
+    let remarkHtml = `<div style="font-size:15px;color:#555;margin-top:8px;padding:8px 12px;background:#f8f8f8;border-radius:4px;text-align:left;">
       <strong>備註 / Remark：</strong><br>
-      _________________________<br>
-      _________________________<br>
-      _________________________
+      ___________________________________________________________________________________________<br>
+      ___________________________________________________________________________________________<br>
+      ___________________________________________________________________________________________
     </div>`;
     
     pdfContainer.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:2px solid #ccc;padding-bottom:8px;">
         <div>
-          <div style="font-size:16px;font-weight:bold;">中國港灣工程有限責任公司</div>
-          <div style="font-size:12px;color:#555;">China Harbour Engineering Company Limited</div>
-          <div style="font-size:11px;color:#666;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
+          <div style="font-size:20px;font-weight:bold;">中國港灣工程有限責任公司</div>
+          <div style="font-size:16px;color:#555;">China Harbour Engineering Company Limited</div>
+          <div style="font-size:15px;color:#666;">西九龍廢物轉運站 | West Kowloon Transfer Station</div>
         </div>
-        <div style="text-align:right;font-size:11px;color:#555;">
+        <div style="text-align:right;font-size:16px;color:#555;">
           ${checkStatusHtml}
         </div>
       </div>
       <div style="text-align:center;margin:10px 0;">
-        <div style="font-size:18px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：___________</div>
+        <div style="font-size:22px;font-weight:bold;color:#1a5c5c;background:#e6f7f7;display:inline-block;padding:6px 20px;border-radius:30px;">📅 到訪日期 / Visit Date：___________</div>
       </div>
-      <div style="font-size:16px;font-weight:bold;text-align:center;margin-bottom:6px;">車輛進入預先登記記錄</div>
-      <div style="font-size:13px;text-align:center;margin-bottom:10px;color:#555;">Registered Vehicle Log</div>
+      <div style="font-size:20px;font-weight:bold;text-align:center;margin-bottom:6px;">車輛進入預先登記記錄</div>
+      <div style="font-size:17px;text-align:center;margin-bottom:10px;color:#555;">Registered Vehicle Log</div>
       <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;">
         <thead>
           <tr style="background:#f0f0f0;">
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:5%;">項目<br><span style="font-weight:normal;font-size:10px;">Item</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:10%;">參考編號<br><span style="font-weight:normal;font-size:10px;">Ref No.</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:12%;">公司<br><span style="font-weight:normal;font-size:10px;">Company</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:10%;">車牌<br><span style="font-weight:normal;font-size:10px;">Vehicle No.</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:12%;">車輛種類<br><span style="font-weight:normal;font-size:10px;">Vehicle Type</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:8%;">聯絡人<br><span style="font-weight:normal;font-size:10px;">Contact</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:8%;">電話<br><span style="font-weight:normal;font-size:10px;">Tel</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:8%;">入站時間<br><span style="font-weight:normal;font-size:10px;">Time In</span></th>
-            <th style="border:1px solid #000;padding:8px 4px;text-align:center;font-weight:bold;font-size:12px;width:27%;">目的<br><span style="font-weight:normal;font-size:10px;">Purpose</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:5%;">項目<br><span style="font-weight:normal;font-size:14px;">Item</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:12%;">參考編號<br><span style="font-weight:normal;font-size:14px;">Ref No.</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:14%;">公司<br><span style="font-weight:normal;font-size:14px;">Company</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:12%;">車牌<br><span style="font-weight:normal;font-size:14px;">Vehicle No.</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:12%;">車輛種類<br><span style="font-weight:normal;font-size:14px;">Vehicle Type</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:8%;">聯絡人<br><span style="font-weight:normal;font-size:14px;">Contact</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:8%;">電話<br><span style="font-weight:normal;font-size:14px;">Tel</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:8%;">入站時間<br><span style="font-weight:normal;font-size:14px;">Time In</span></th>
+            <th style="border:1px solid #000;padding:12px 8px;text-align:center;font-weight:bold;font-size:16px;width:21%;">目的<br><span style="font-weight:normal;font-size:14px;">Purpose</span></th>
           </tr>
         </thead>
         <tbody>${blankRows}</tbody>
       </table>
       ${remarkHtml}
-      <div style="margin-top:8px;font-size:11px;text-align:center;color:#888;">系統產生之記錄，請查閱後續簽署</div>
-      <div style="font-size:10px;text-align:center;color:#999;">System generated record, please sign after checking</div>
+      <div style="margin-top:8px;font-size:15px;text-align:center;color:#888;">系統產生之記錄，請查閱後續簽署</div>
+      <div style="font-size:14px;text-align:center;color:#999;">System generated record, please sign after checking</div>
     `;
     
     document.body.appendChild(pdfContainer);
